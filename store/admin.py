@@ -12,7 +12,7 @@ class ItemDetailAdmin(ModelAdmin):
   model = ItemDetailPage
   menu_label = "商品一覧/編集/追加"
   menu_icon = "folder"
-  list_display = ("title", "price", "discount_price", "get_item_categories", "get_item_tags", "stock", "pickup", "featured", "draft")
+  list_display = ("title", "price", "discount_price", "get_item_categories", "get_item_tags", "stock", "pickup", "featured", "live")
   search_fields = ("title", "get_item_categories", "get_item_tags")
 
   def get_item_categories(self, obj):

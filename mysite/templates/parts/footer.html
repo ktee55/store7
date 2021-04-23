@@ -1,0 +1,49 @@
+{% load static %}
+<footer class="page-footer text-center font-small mt-4 wow fadeIn clearfix">
+
+  <div class="footer-copyright py-3">
+    -Copyright ©2020 <a href="#">A Market.</a> All Rights Reserved.-
+  </div>
+
+</footer>
+
+<!-- <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script> -->
+<!-- <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script> -->
+<!-- <script type="text/javascript" src="{% static 'js/jquery.bxslider.js' %}"></script> -->
+<!-- <script>
+  $(document).ready(function () {
+    //bxslider メインスライド用
+    $('.bxslider').bxSlider({
+      pagerCustom: '#bx-pager',  //ページャーをサムネイルにする
+      // preventDefaultSwipeY:false,
+      controls: false//前後の矢印を消す
+    });
+  });
+</script> -->
+
+
+<script src="https://unpkg.com/swiper/swiper-bundle.js"></script>
+<script>
+  var galleryThumbs = new Swiper('.gallery-thumbs', {
+    spaceBetween: 10,
+    slidesPerView: 5,
+    freeMode: true,
+    watchSlidesVisibility: true,
+    watchSlidesProgress: true,
+  });
+  var galleryTop = new Swiper('.gallery-top', {
+    spaceBetween: 10,
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    thumbs: {
+      swiper: galleryThumbs
+    }
+  });
+</script>
+<!-- <script>
+  var swiper = new Swiper('.swiper-container');
+</script> -->
+
+<script src="{% static 'js/app.js' %}"></script>

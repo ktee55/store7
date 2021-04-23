@@ -1,0 +1,84 @@
+
+<nav id="main-menu" class="navbar navbar-expand-lg navbar-light scrolling-navbar">
+  <div class="container">
+
+    <!-- Brand -->
+    <a class="navbar-brand waves-effect" href="">
+      <h1>{{ request.site.siteinfo.title }}</h1>
+    </a>
+
+    <!-- Collapse -->
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Links -->
+    <div class="collapse navbar-collapse">
+
+      <!-- Left -->
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link waves-effect" href="">お問い合わせ</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link waves-effect" href="">ブログ</a>
+        </li>
+      </ul>
+
+      <!-- Right -->
+      <ul class="navbar-nav nav-flex-icons">
+        {% if request.user.is_authenticated %}
+        <li class="nav-item username">
+          for
+          {% if user.first_name and user.last_name %}
+          <h5>{{ user.last_name }}{{ user.first_name }}</h5>
+          {% else %}
+          <h5>{{ user.username }}</h5>
+          {% endif %}
+        </li>
+        <li class="nav-item">
+          <a class="nav-link waves-effect" href=""><i class="fas fa-user-edit"></i>プロフィール</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link waves-effect" href=""><i class="fas fa-history"></i>購入履歴</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link waves-effect" href=""><i class="far fa-bookmark"></i>お気に入り</a>
+        </li>
+        <li class="nav-item">
+          <a id="nav-cart" class="nav-link waves-effect" href="">
+            <span class="badge badge-quantity z-depth-1"> {{ request.user }} </span>
+            <i class="fas fa-shopping-cart"></i>
+            <!-- <span class="clearfix d-none d-sm-inline-block"> カート </span> -->
+            <span class="clearfix d-sm-inline-block">カート</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link waves-effect" href="">
+            <span class="clearfix d-sm-inline-block"><i class="fas fa-sign-out-alt"></i>ログアウト</span>
+          </a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link waves-effect" href="">
+            <span class="clearfix d-sm-inline-block"><i class="fas fa-sign-in-alt"></i>ログイン</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link waves-effect" href="">
+            <span class="clearfix d-sm-inline-block"><i class="fas fa-user-plus"></i>新規登録</span>
+          </a>
+        </li>
+        {% endif %}
+      </ul>
+
+    </div>
+
+  </div>
+</nav>
+<div class="container">
+  <p class="testing-alert">
+    ※このサイトはEコマースのサンプルサイトです。決済機能を完結してお試し頂けますが、実際の注文は発生致しません。ご了承下さい。
+  </p>
+</div>
