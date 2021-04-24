@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'search',
     'core',
     'store',
+    'users',
 
     'wagtail.contrib.modeladmin',
     'wagtail.contrib.forms',
