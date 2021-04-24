@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.shortcuts import reverse
 from django.template.defaultfilters import slugify
 
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
@@ -17,7 +18,23 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 # from wagtail.snippets.models import register_snippet
 
 from .forms import ItemOptionForm
+from users.models import ShippingAddress, BillingAddress
 # from streams import blocks
+
+PAYMENT_CHOICES = (
+    ('C', 'クレジットカード'),
+    ('B', '銀行振込')
+    # ('P', 'PayPal'),
+)
+
+DELIVERY_TIME = (
+    ('', '指定なし'),
+    ('A', '午前中'),
+    ('B', '0pm-2pm'),
+    ('C', '2pm-4pm'),
+    ('D', '4pm-6pm'),
+    ('E', '6pm-8pm')
+)
 
 class ItemListingPage(RoutablePageMixin, Page):
   """Listing page lists all the Item Detail Pages."""
@@ -159,21 +176,35 @@ class ItemDetailPage(Page):
   def __str__(self):
     return self.title
 
-  # def get_absolute_url(self):
-  #   return reverse("core:item", kwargs={
-  #       'slug': self.slug
-  #   })
+  def get_add_to_cart_url(self):
+    return reverse("store:add-to-cart", kwargs={
+        'pk': self.pk
+    })
 
+  def get_remove_from_cart_url(self):
+    return reverse("store:remove-from-cart", kwargs={
+        'pk': self.pk
+    })
+
+  def get_add_to_fav_items_url(self):
+    return reverse("store:add-to-fav-items", kwargs={
+        'pk': self.pk
+    })
+
+  def get_remove_from_fav_items_url(self):
+    return reverse("store:remove-from-fav-items", kwargs={
+        'pk': self.pk
+    })
 
   def get_context(self, request, *args, **kwargs):
     context = super().get_context(request, *args, **kwargs)
     context["form"] = ItemOptionForm(
-        ItemDetailPage.objects.filter(id=self.id).first() or None)
+        ItemDetailPage.objects.get(pk=self.id) or None)
     context["other_items"] = ItemDetailPage.objects.live(
     ).public().exclude(slug=self.slug).order_by('?')[:3]
+    if self.fav_users.filter(id=request.user.id):
+        context["already_favorite"] = True
     # context["categories"] = ItemCategory.objects.all()
-    # if self.object.fav_users.filter(id=self.request.user.id):
-    #     context["already_favorite"] = True
     return context
 
 
@@ -260,4 +291,111 @@ class ColorOption(models.Model):
 
 #     def __str__(self):
 #         return self.name
+
+
+class OrderItem(models.Model):
+
+  user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                           on_delete=models.CASCADE)
+  ordered = models.BooleanField(default=False)
+  item = models.ForeignKey(ItemDetailPage, on_delete=models.CASCADE)
+  quantity = models.IntegerField(default=0)
+  # item_variations = models.ManyToManyField(ItemVariation)
+  color = models.ForeignKey(
+      ColorOption, on_delete=models.SET_NULL, blank=True, null=True)
+  size = models.ForeignKey(
+      SizeOption, on_delete=models.SET_NULL, blank=True, null=True)
+
+  class Meta:
+    verbose_name_plural = 'カート内各商品'
+
+  def __str__(self):
+    return f"{self.quantity} of {self.item.title}"
+
+  def get_total_item_price(self):
+    return self.quantity * self.item.price
+
+  def get_total_discount_item_price(self):
+    return self.quantity * self.item.discount_price
+
+  def get_amount_saved(self):
+    return self.get_total_item_price() - self.get_total_discount_item_price()
+
+  def get_final_price(self):
+    if self.item.discount_price:
+      return self.get_total_discount_item_price()
+    return self.get_total_item_price()
+
+
+class Order(models.Model):
+
+  user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                           on_delete=models.CASCADE, related_name="orders")
+  items = models.ManyToManyField(OrderItem)
+  start_date = models.DateTimeField(auto_now_add=True)
+  ordered_date = models.DateTimeField()
+  ordered = models.BooleanField(default=False)
+  dispatched = models.BooleanField(default=False)
+  shipping_address = models.ForeignKey(
+      'users.ShippingAddress', on_delete=models.SET_NULL, blank=True, null=True)
+  billing_address = models.ForeignKey(
+      'users.BillingAddress', on_delete=models.SET_NULL, blank=True, null=True)
+  payment_option = models.CharField(
+      choices=PAYMENT_CHOICES, max_length=2, blank=True, null=True)
+  delivery_time = models.CharField(
+      choices=DELIVERY_TIME, max_length=2, blank=True, null=True)
+  payment = models.ForeignKey(
+      'Payment', on_delete=models.SET_NULL, blank=True, null=True)
+
+  class Meta:
+    verbose_name_plural = 'カート内全商品/注文済注文'
+
+  def __str__(self):
+    return self.user.username
+
+  def get_total(self):
+    total = 0
+    for order_item in self.items.all():
+      total += order_item.get_final_price()
+    return total
+
+  def get_postage(self):
+    total = self.get_total()
+    # site_info = Site.objects.get_current().siteinfo
+    # if site_info.free_shippment_line:
+    #   if total > site_info.free_shippment_line:
+    #     return 0
+    #   else:
+    #     return site_info.shipping_fee
+    # else:
+    #   return site_info.shipping_fee
+    return 0
+
+  def to_free_postage(self):
+    site_info = Site.objects.get_current().siteinfo
+    if site_info.free_shippment_line:
+      return Site.objects.get_current().siteinfo.free_shippment_line - self.get_total()
+
+  def get_total_w_postage(self):
+    return self.get_total() + self.get_postage()
+
+  def get_order_dispatched(self):
+    return reverse("core:order-dispatched", kwargs={
+        'pk': self.pk
+    })
+
+
+class Payment(models.Model):
+  stripe_charge_id = models.CharField(max_length=50)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL,
+                           on_delete=models.SET_NULL, blank=True, null=True)
+  amount = models.FloatField()
+  timestamp = models.DateTimeField(auto_now_add=True)
+
+  class Meta:
+    verbose_name_plural = 'Stripe'
+
+  def __str__(self):
+    return self.user.username
+
 

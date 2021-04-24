@@ -1,4 +1,5 @@
 from django import forms
+from users.models import ShippingAddress, BillingAddress
 
 # from django.apps import apps
 # SizeOption = apps.get_model('store.SizeOption')
@@ -8,10 +9,25 @@ from django import forms
 def SizeOption():
   from .models import SizeOption
   return SizeOption
+  
 def ColorOption():
   from .models import ColorOption
   return ColorOption
 
+PAYMENT_CHOICES = (
+    ('C', 'クレジットカード'),
+    ('B', '銀行振込')
+    # ('P', 'PayPal'),
+)
+
+DELIVERY_TIME = (
+    ('', '指定なし'),
+    ('A', '午前中'),
+    ('B', '0pm-2pm'),
+    ('C', '2pm-4pm'),
+    ('D', '4pm-6pm'),
+    ('E', '6pm-8pm')
+)
 
 class ItemOptionForm(forms.Form):
 
@@ -57,3 +73,30 @@ class ItemOptionForm(forms.Form):
             self.fields['color_option'].queryset = ColorOption().objects.filter(
                 item=item).order_by('id')
             self.fields['color_option'].required = True
+
+
+class CheckoutForm(forms.Form):
+
+    delivery_time = forms.ChoiceField(
+        choices=DELIVERY_TIME,
+        required=False
+    )
+
+    payment_option = forms.ChoiceField(
+        widget=forms.RadioSelect,
+        choices=PAYMENT_CHOICES
+    )
+
+
+BILLING_ADDRESS_OPTION = (
+    ('A', 'この住所を使う'),
+    ('B', '請求先住所を配送先住所と同じにする')
+)
+
+class BillingAddressForm(forms.Form):
+
+    billing_address_option = forms.ChoiceField(
+        widget=forms.RadioSelect,
+        choices=BILLING_ADDRESS_OPTION
+    )
+

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load humanize %}
+
+{% block head_title %}ショッピングカート - {{ request.site.siteinfo.title }}{% endblock %}
+
+{% block content %}
+
+
+<main class="clearfix">
+
+  <div id="shopping-cart" class="container">
+
+    <h2>ショッピングカート</h2>
+
+    {% include "parts/cart-list.html" %}
+
+    <div class="clearfix flex-buttons">
+      {% if order.get_total %}
+      <a class="btn btn-second" href="/">買い物を続ける</a>
+      <a class='btn btn-main' href="{% url 'store:checkout' %}">ご注文手続きに進む</a>
+      <!-- <a class="btn btn-second" href="{{request.META.HTTP_REFERER}}">買い物を続ける</a> -->
+
+      {% else %}
+      <!-- <a class="btn btn-second" href="{{request.META.HTTP_REFERER}}">買い物を続ける</a> -->
+      <a class="btn btn-second" href="/">買い物を続ける</a>
+      {% endif %}
+    </div>
+
+  </div> <!-- container -->
+
+
+
+
+
+  {% endblock content %}

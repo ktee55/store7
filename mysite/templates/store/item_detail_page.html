@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags wagtailcore_tags wagtailimages_tags humanize %}
-{% block head_title %}{{ page.title }} - {% if page.get_site.site_name %}{{ page.get_site.site_name }}{% endif %}{% endblock %}
+{% block head_title %}{{ self.title }} - {% if self.get_site.site_name %}{{ self.get_site.site_name }}{% endif %}{% endblock %}
 
 {% block content %}
 
@@ -14,8 +14,8 @@
 
       <div class="swiper-container gallery-top">
         <ul class="swiper-wrapper">
-          {% if page.slide_images.count %}
-          {% for loop_cycle in page.slide_images.all %}
+          {% if self.slide_images.count %}
+          {% for loop_cycle in self.slide_images.all %}
           {% image loop_cycle.slide_image width-600 as img %}
           <li class="swiper-slide expand-modal square">
             <img src="{{ img.url }}" alt="{% if loop_cycle.slide_img_alt %}{{ loop_cycle.slide_img_alt }}{% else %}{{ img.alt }}{% endif %}"> 
@@ -33,8 +33,8 @@
 
       <div class="swiper-container gallery-thumbs">
         <ul class="swiper-wrapper">
-          {% if page.slide_images.count %}
-          {% for loop_cycle in page.slide_images.all %}
+          {% if self.slide_images.count %}
+          {% for loop_cycle in self.slide_images.all %}
           {% image loop_cycle.slide_image fill-150x150 as img %}
           <li class="swiper-slide">
             <img src="{{ img.url }}" alt="{% if loop_cycle.slide_img_alt %}{{ loop_cycle.slide_img_alt }}{% else %}{{ img.alt }}{% endif %}">
@@ -46,8 +46,8 @@
       </div>
       <!-- swiper-container -->
 
-      {% if page.slide_images.count %}
-      {% for loop_cycle in page.slide_images.all %}
+      {% if self.slide_images.count %}
+      {% for loop_cycle in self.slide_images.all %}
       <div class="modal">
         {% image loop_cycle.slide_image width-1920 as img %}
         <div class="bcimage" style="background-image: url('{{ img.url }}');"></div>
@@ -68,37 +68,37 @@
         </a>
 
         <h2>
-          {{ page.title }}
-          {% if page.draft %}
+          {{ self.title }}
+          {% if self.draft %}
           <small class="text-danger">（非公開中）</small>
           {% endif %}
         </h2>
 
         <p class="price">
-          {% if page.discount_price %}
+          {% if self.discount_price %}
           <span class="mr-1">
-            <small><del>¥{{ page.price | intcomma }}</del></small>
+            <small><del>¥{{ self.price | intcomma }}</del></small>
           </span>
-          <span>¥{{ page.discount_price | intcomma }}</span>
+          <span>¥{{ self.discount_price | intcomma }}</span>
           {% else %}
-          <span>¥{{ page.price | intcomma }}</span>
+          <span>¥{{ self.price | intcomma }}</span>
           {% endif %}
         </p>
-        <p class="mt-3 mb-3">{{ page.description | safe | linebreaks }} </p>
+        <p class="mt-3 mb-3">{{ self.description | richtext }} </p>
 
-        {% if page.stock == 0 %}
+        {% if self.stock == 0 %}
         <p class="stock text-danger">在庫がありません</p>
-        {% elif page.stock %}
-        <p class="stock">在庫数: {{ page.stock }}</p>
+        {% elif self.stock %}
+        <p class="stock">在庫数: {{ self.stock }}</p>
         {% endif %}
 
-        {% if not page.stock == 0 %}
-        <form method="POST" action="" class="post-form">
+        {% if not self.stock == 0 %}
+        <form method="POST" action="{% url 'store:add-to-cart' self.id %}" class="post-form">
           {% csrf_token %}
           <fieldset class="form-group">
             <!-- <legend class="border-bottm mb-4">Option</legend> -->
 
-            {% if page.color_option.count %}
+            {% if self.color_option.count %}
             <div id="div_id_color_option" class="form-group">
               <label for="id_color_option" class=" requiredField">カラー<span class="asteriskField">*</span> </label>
               <div>
@@ -106,7 +106,7 @@
               </div>
             </div>
             {% endif %}
-            {% if page.size_option.count %}
+            {% if self.size_option.count %}
             <div id="div_id_size_option" class="form-group">
               <label for="id_size_option" class=" requiredField">サイズ<span class="asteriskField">*</span> </label>
               <div>
@@ -128,10 +128,10 @@
 
         <div>
           {% if already_favorite %}
-          <a href="{{ page.get_remove_from_fav_items_url }}" class="btn btn-outline-second btn-md"
+          <a href="{{ self.get_remove_from_fav_items_url }}" class="btn btn-outline-second btn-md"
             id="add-to-cart">お気に入りから外す</a>
           {% else %}
-          <a href="{{ page.get_add_to_fav_items_url }}" class="btn btn-outline-main btn-md"
+          <a href="{{ self.get_add_to_fav_items_url }}" class="btn btn-outline-main btn-md"
             id="add-to-cart">お気に入りに追加</a>
           {% endif %}
         </div>
@@ -165,14 +165,17 @@
         {% if item.list_image %}
         <div class="square">
           {% image item.list_image max-150x150 as img %}
-          <a href="{{ item.get_absolute_url }}">
+          <a href="{{ item.url }}">
+          <!-- <a href="{% pageurl item %}"> -->
             <img src="{{ img.url }}" alt="{% if item.list_img_alt %}{{ item.list_img_alt }}{% else %}{{ img.alt }}{% endif %}">
           </a>
         </div>
         {% endif %}
         <div class="item-title">
-          <small>{{ item.get_category_display }}</small>
-          <a href="{{ item.get_absolute_url }}">
+          {% for category in item.categories.all %}
+          <small>{{ category }}</small>
+          {% endfor %}
+          <a href="{{ item.url }}">
             <h3>{{ item.title }}</h3>
           </a>
           <p>¥

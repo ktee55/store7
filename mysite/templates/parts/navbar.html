@@ -1,3 +1,4 @@
+{% load cart_template_tags %}
 
 <nav id="main-menu" class="navbar navbar-expand-lg navbar-light scrolling-navbar">
   <div class="container">
@@ -38,17 +39,17 @@
           {% endif %}
         </li>
         <li class="nav-item">
-          <a class="nav-link waves-effect" href=""><i class="fas fa-user-edit"></i>プロフィール</a>
+          <a class="nav-link waves-effect" href="{% url 'user:profile' %}"><i class="fas fa-user-edit"></i>プロフィール</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link waves-effect" href=""><i class="fas fa-history"></i>購入履歴</a>
+          <a class="nav-link waves-effect" href="{% url 'user:order-history' %}"><i class="fas fa-history"></i>購入履歴</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link waves-effect" href=""><i class="far fa-bookmark"></i>お気に入り</a>
+          <a class="nav-link waves-effect" href="{% url 'user:fav-items' %}"><i class="far fa-bookmark"></i>お気に入り</a>
         </li>
         <li class="nav-item">
-          <a id="nav-cart" class="nav-link waves-effect" href="">
-            <span class="badge badge-quantity z-depth-1"> {{ request.user }} </span>
+          <a id="nav-cart" class="nav-link waves-effect" href="{% url 'store:shopping-cart' %}">
+            <span class="badge badge-quantity z-depth-1">{{ request.user | cart_item_count  }}</span>
             <i class="fas fa-shopping-cart"></i>
             <!-- <span class="clearfix d-none d-sm-inline-block"> カート </span> -->
             <span class="clearfix d-sm-inline-block">カート</span>
