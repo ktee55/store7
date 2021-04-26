@@ -16,7 +16,7 @@
         <ul class="swiper-wrapper">
           {% if self.slide_images.count %}
           {% for loop_cycle in self.slide_images.all %}
-          {% image loop_cycle.slide_image width-600 as img %}
+          {% image loop_cycle.slide_image max-600x600 as img %}
           <li class="swiper-slide expand-modal square">
             <img src="{{ img.url }}" alt="{% if loop_cycle.slide_img_alt %}{{ loop_cycle.slide_img_alt }}{% else %}{{ img.alt }}{% endif %}"> 
           </li>
@@ -156,9 +156,11 @@
   </div>
   <!--feature-->
 
+  <h6>Categories:</h6>
   {% for category in self.categories.all %}
    {{ category }}
   {% endfor %}
+  <h6>Tags:</h6>
   {% for tag in self.tags.all %}
    {{ tag }}
   {% endfor %}

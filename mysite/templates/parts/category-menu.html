@@ -42,7 +42,7 @@
     {% for cat in categories %}
       {% if cat.items.count %}
       <li class="nav-item">
-        <a href="{% routablepageurl page 'category_view' cat.slug %}" class="nav-link">
+        <a href="{% url 'store:category-view' cat.slug %}" class="nav-link">
         {{ cat }} ({{ cat.items.count }})
         </a>
       </li>

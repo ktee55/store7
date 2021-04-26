@@ -28,7 +28,7 @@ INSTALLED_APPS = [
     'search',
     'core',
     'store',
-    'users',
+    'users.apps.UsersConfig',
 
     'wagtail.contrib.settings',
     'wagtail.contrib.routable_page',
@@ -85,6 +85,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'store.context_processors.global_val',
             ],
         },
     },

@@ -26,4 +26,6 @@ urlpatterns = [
 
   path('confirm-order/', confirm_order, name='confirm-order'),
   path('order-dispatched/<int:pk>', order_dispatched, name='order-dispatched'),
+
+  path('items/category/<str:cat_slug>/', CategoryItemListView.as_view(), name='category-view'),
 ]

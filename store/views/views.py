@@ -1,13 +1,40 @@
 from django.contrib import messages
-from django.shortcuts import render, redirect #, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.mixins import LoginRequiredMixin #, UserPassesTestMixin
-from django.views.generic import View
+from django.views.generic import View, ListView
+from taggit.models import Tag
 
-from ..models import Order
+from ..models import Order, ItemDetailPage, ItemCategory, ItemParentCategory
 from ..forms import CheckoutForm, BillingAddressForm, ItemOptionForm
 from core.boost import DynamicRedirectMixin
 from users.models import ShippingAddress, BillingAddress
+
+
+class CategoryItemListView(ListView):
+    model = ItemDetailPage
+    template_name = 'store/item_listing_page.html'
+    context_object_name = 'items'
+    paginate_by = 1
+
+    def get_queryset(self):
+      # category = get_object_or_404(ItemCategory, slug=self.kwargs.get('cat_slug'))
+      # return category.items.live().public().order_by('-first_published_at')
+      try:
+          category = ItemCategory.objects.get(slug=self.kwargs.get('cat_slug'))
+      except Exception:
+          messages.error(self.request, "指定されたカテゴリーは存在しませんでした。")
+          return redirect('/blog/')
+      
+      # return ItemDetailPage.objects.live().public().order_by('-first_published_at').filter(categories__in=[category])
+      return category.items.live().public().order_by('-first_published_at')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["category"] = get_object_or_404(ItemCategory, slug=self.kwargs.get('cat_slug'))
+
+        return context
+
 
 class CartView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):

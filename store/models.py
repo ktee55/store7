@@ -38,21 +38,21 @@ DELIVERY_TIME = (
 )
 
 
-class ItemPagination(models.Model):
+# class ItemPagination(models.Model):
 
-    listing_page = models.IntegerField(default=10)
-    category_page = models.IntegerField(default=10)
-    tag_page = models.IntegerField(default=10)
+#     listing_page = models.IntegerField(default=10)
+#     category_page = models.IntegerField(default=10)
+#     tag_page = models.IntegerField(default=10)
 
-    panels = [
-        FieldPanel("listing_page"),
-        FieldPanel("category_page"),
-        FieldPanel("tag_page"),
-    ]
+#     panels = [
+#         FieldPanel("listing_page"),
+#         FieldPanel("category_page"),
+#         FieldPanel("tag_page"),
+#     ]
 
-    class Meta:
-        verbose_name = "Blog Pagination"
-        verbose_name_plural = "Blog Paginations"
+#     class Meta:
+#         verbose_name = "Blog Pagination"
+#         verbose_name_plural = "Blog Paginations"
 
 
 def paginate(request, all_items, count):
@@ -85,33 +85,34 @@ class ItemListingPage(RoutablePageMixin, Page):
 
       context["items"] = paginate(request, all_items, pagination)
 
-      context["parent_categories"] = ItemParentCategory.objects.all()
-      context["categories"] = ItemCategory.objects.filter(parent__isnull=True)
-      context["tags"] = Tag.objects.all()
+      # context["parent_categories"] = ItemParentCategory.objects.all()
+      # context["categories"] = ItemCategory.objects.filter(parent__isnull=True)
+      # context["tags"] = Tag.objects.all()
+
       return context
 
 
-  @route(r'^category/(?P<cat_slug>[-\w]*)/$', name="category_view")
-  def category_view(self, request, cat_slug):
-      """Find items based on a category."""
-      context = self.get_context(request)
+  # @route(r'^category/(?P<cat_slug>[-\w]*)/$', name="category_view")
+  # def category_view(self, request, cat_slug):
+  #     """Find items based on a category."""
+  #     context = self.get_context(request)
 
-      try:
-          category = ItemCategory.objects.get(slug=cat_slug)
-      except Exception:
-          messages.error(request, "指定されたカテゴリーは存在しませんでした。")
-          return redirect('/blog/')
-      # except BlogCategory.DoesNotExist:
-      #     raise Http404("このカテゴリーは存在しません。")
+  #     try:
+  #         category = ItemCategory.objects.get(slug=cat_slug)
+  #     except Exception:
+  #         messages.error(request, "指定されたカテゴリーは存在しませんでした。")
+  #         return redirect('/blog/')
+  #     # except BlogCategory.DoesNotExist:
+  #     #     raise Http404("このカテゴリーは存在しません。")
 
-      all_items = ItemDetailPage.objects.live().public().order_by('-first_published_at').filter(categories__in=[category])
-      # pagination = BlogPagination.objects.first()
-      pagination = 1
-      # context["items"] = paginate(request, all_items, pagination.category_page)
-      context["items"] = paginate(request, all_items, pagination)
-      context["category_name"] = category.name
+  #     all_items = ItemDetailPage.objects.live().public().order_by('-first_published_at').filter(categories__in=[category])
+  #     # pagination = BlogPagination.objects.first()
+  #     pagination = 1
+  #     # context["items"] = paginate(request, all_items, pagination.category_page)
+  #     context["items"] = paginate(request, all_items, pagination)
+  #     context["category_name"] = category.name
 
-      return render(request, "store/item_listing_page.html", context)
+  #     return render(request, "store/item_listing_page.html", context)
 
 
   @route(r'^tag/(?P<tag_slug>[-\w]*)/$', name="tag_view")
@@ -295,7 +296,8 @@ class ItemDetailPage(Page):
     ).public().exclude(slug=self.slug).order_by('?')[:3]
     if self.fav_users.filter(id=request.user.id):
         context["already_favorite"] = True
-    # context["categories"] = ItemCategory.objects.all()
+    # context["parent_categories"] = ItemParentCategory.objects.all()
+    # context["categories"] = ItemCategory.objects.filter(parent__isnull=True)
     return context
 
 
