@@ -1,0 +1,49 @@
+
+{% if dispatched %}
+商品が発送されました。
+{% else %}
+ご注文内容
+{% endif %}
+
+{{ order.user.first_name }} {{ order.user.last_name }} 様
+      
+注文番号: {{ order.id}}
+
+注文日時: {{ order.ordered_date }}
+
+{% for order_item in order.items.all %}
+No. {{ forloop.counter }}
+Item: {{ order_item.item.title }}
+{% if order_item.item.discount_price %}
+  価格: ¥{{ order_item.item.discount_price }}
+  数量: {{ order_item.quantity }}
+-----------------------------------------
+  合計: ¥{{ order_item.get_total_discount_item_price }}
+{% else %}
+  価格:  ¥{{ order_item.item.price }}
+  数量: {{ order_item.quantity }}
+-----------------------------------------
+  合計: ¥{{ order_item.get_total_item_price }}
+{% endif %}
+{% endfor %}
+
+小計: {{ order.get_total }}
+-----------------------------------------
+送料: {{ order.get_postage }}
+
+合計金額: {{ order.get_total_w_postage }}
+
+
+お支払い方法: {{ order.get_payment_option_display }}
+
+送付先住所:
+  {{ order.shipping_address.street_address }}, {{ order.shipping_address.city }}
+  {{ order.shipping_address.state }} {{ order.shipping_address.zip }} 
+  {{ order.shipping_address.country }}
+  
+請求先住所:
+  {{ order.billing_address.street_address }}, {{ order.billing_address.city }}
+  {{ order.billing_address.state }} {{ order.billing_address.zip }} 
+  {{ order.billing_address.country }}
+  
+配送時間帯: {{ order.get_delivery_time_display }}

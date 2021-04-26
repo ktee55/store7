@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load humanize %}
+{% load humanize wagtailimages_tags %}
 {% block head_title %}
 {% if history %}
 購入履歴
@@ -37,7 +37,6 @@
         {% endif %}
         </span>
         {% if list_for_staff %}
-        <!-- <a href="{% url 'core:order-dispatched' order.id %}" class=" btn btn-outline-primary btn-sm"> -->
         {% if order.dispatched %}
         <a href="{{ order.get_order_dispatched }}" class=" btn btn-outline-main btn-sm">
           発送済み取り消し
@@ -62,14 +61,15 @@
 
       {% for order_item in order.items.all %}
       <div>
-        {% if order_item.item.image %}
-        <a href="{% url 'core:item' order_item.item.slug %}">
-          <img src="{{ order_item.item.image_thumb.url }}" class="thumb">
+        {% if order_item.item.list_image %}
+        {% image order_item.item.list_image fill-100x100 as img %} 
+        <a href="{{ order_item.item.url }}">
+          <img src="{{ img.url }}" alt="{% if order_item.item.list_img_alt %}{{ order_item.item.list_img_alt }}{% else %}{{ img.alt }}{% endif %}">
         </a>
         {% endif %}
       </div>
       <div>
-        <a href="{% url 'core:item' order_item.item.slug %}">
+        <a href="{{ order_item.item.url }}">
           {{ order_item.item.title }}
         </a>
       </div>
@@ -113,15 +113,15 @@
       {% for order_item in order.items.all %}
       <tr>
         <th scope="row">
-          {% if order_item.item.image %}
-          <a href="{% url 'core:item' order_item.item.slug %}">
-            <img src="{{ order_item.item.image_thumb.url }}" class="thumb">
+          {% if order_item.item.list_image %}
+          {% image order_item.item.list_image fill-100x100 as img %} 
+          <a href="{{ order_item.item.url }}">
+            <img src="{{ img.url }}" alt="{% if order_item.item.list_img_alt %}{{ order_item.item.list_img_alt }}{% else %}{{ img.alt }}{% endif %}">
           </a>
           {% endif %}
         </th>
         <td>
-          <!-- <a href="{{order_item.item.get_absolute_url}}"> -->
-          <a href="{% url 'core:item' order_item.item.slug %}">
+          <a href="{{ order_item.item.url }}">
             {{ order_item.item.title }}
           </a>
         </td>
