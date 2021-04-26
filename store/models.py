@@ -1,7 +1,8 @@
 from django.db import models
 from django.conf import settings
-from django.shortcuts import reverse
+from django.shortcuts import reverse, render
 from django.template.defaultfilters import slugify
+from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from modelcluster.models import ClusterableModel
@@ -36,6 +37,38 @@ DELIVERY_TIME = (
     ('E', '6pm-8pm')
 )
 
+
+class ItemPagination(models.Model):
+
+    listing_page = models.IntegerField(default=10)
+    category_page = models.IntegerField(default=10)
+    tag_page = models.IntegerField(default=10)
+
+    panels = [
+        FieldPanel("listing_page"),
+        FieldPanel("category_page"),
+        FieldPanel("tag_page"),
+    ]
+
+    class Meta:
+        verbose_name = "Blog Pagination"
+        verbose_name_plural = "Blog Paginations"
+
+
+def paginate(request, all_items, count):
+    paginator = Paginator(all_items, count)
+
+    page = request.GET.get("page")
+    try:
+        items = paginator.page(page)
+    except PageNotAnInteger:
+        items = paginator.page(1)
+    except EmptyPage:
+        items = paginator.page(page.num_pages)
+    
+    return items
+
+
 class ItemListingPage(RoutablePageMixin, Page):
   """Listing page lists all the Item Detail Pages."""
 
@@ -43,6 +76,63 @@ class ItemListingPage(RoutablePageMixin, Page):
   max_count = 1
   parent_page_types = ['home.HomePage']
   subpage_types = ['store.ItemDetailPage']
+
+  def get_context(self, request, *args, **kwargs):
+      context = super().get_context(request, *args, **kwargs)
+      all_items = ItemDetailPage.objects.live().public().order_by('-first_published_at')
+      # pagination = ItemPagination.objects.first()
+      pagination = 1
+
+      context["items"] = paginate(request, all_items, pagination)
+
+      context["parent_categories"] = ItemParentCategory.objects.all()
+      context["categories"] = ItemCategory.objects.filter(parent__isnull=True)
+      context["tags"] = Tag.objects.all()
+      return context
+
+
+  @route(r'^category/(?P<cat_slug>[-\w]*)/$', name="category_view")
+  def category_view(self, request, cat_slug):
+      """Find items based on a category."""
+      context = self.get_context(request)
+
+      try:
+          category = ItemCategory.objects.get(slug=cat_slug)
+      except Exception:
+          messages.error(request, "指定されたカテゴリーは存在しませんでした。")
+          return redirect('/blog/')
+      # except BlogCategory.DoesNotExist:
+      #     raise Http404("このカテゴリーは存在しません。")
+
+      all_items = ItemDetailPage.objects.live().public().order_by('-first_published_at').filter(categories__in=[category])
+      # pagination = BlogPagination.objects.first()
+      pagination = 1
+      # context["items"] = paginate(request, all_items, pagination.category_page)
+      context["items"] = paginate(request, all_items, pagination)
+      context["category_name"] = category.name
+
+      return render(request, "store/item_listing_page.html", context)
+
+
+  @route(r'^tag/(?P<tag_slug>[-\w]*)/$', name="tag_view")
+  def tag_view(self, request, tag_slug):
+      """Find items based on a tag."""
+      context = self.get_context(request)
+
+      try:
+          tag = Tag.objects.get(slug=tag_slug)
+      except Exception:
+          messages.error(request, "指定されたタグは存在しませんでした。")
+          return redirect('/blog/')
+
+      all_items = ItemDetailPage.objects.live().public().order_by('-first_published_at').filter(tags__in=[tag])
+      # pagination = BlogPagination.objects.first()
+      pagination = 1
+      # context["items"] = paginate(request, all_items, pagination.tag_page)
+      context["items"] = paginate(request, all_items, pagination)
+      context["tag_name"] = tag.name
+      
+      return render(request, "store/item_listing_page.html", context)
 
 
 class ItemParentCategory(models.Model):
@@ -171,6 +261,7 @@ class ItemDetailPage(Page):
   ]
 
   class Meta:
+    verbose_name = '商品'
     verbose_name_plural = '商品'
 
   def __str__(self):

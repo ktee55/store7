@@ -1,4 +1,4 @@
-{% load humanize %}
+{% load humanize wagtailimages_tags %}
 
 <div class="cart-list">
   <!-- <div class="mobile-off"></div>
@@ -9,14 +9,15 @@
 
   {% for order_item in order.items.all %}
   <div>
-    {% if order_item.item.image %}
-    <a href="">
-      <img src="{{ order_item.item.image_thumb.url }}" class="thumb">
+    {% if order_item.item.list_image %}
+    {% image order_item.item.list_image fill-100x100 as img %} 
+    <a href="{{ order_item.item.url }}">
+      <img src="{{ img.url }}" alt="{% if order_item.item.list_img_alt %}{{ order_item.item.list_img_alt }}{% else %}{{ img.alt }}{% endif %}">
     </a>
     {% endif %}
   </div>
   <div>
-    <a href="">
+    <a href="{{ order_item.item.url }}">
       {{ order_item.item.title }}
     </a>
   </div>

@@ -1,3 +1,4 @@
+{% load wagtailroutablepage_tags %}
 <!--Navbar-->
 <nav id="category-menu" class="navbar navbar-expand-lg navbar-dark">
 
@@ -13,17 +14,43 @@
   <!-- Collapsible content -->
   <div class="collapse navbar-collapse">
 
-    <!-- Links -->
+    {% if parent_categories.count or categories.count %}
     <ul class="navbar-nav mr-auto">
-      {% for category in categories %}
-      {% if category.published_items.count %}
-      <li class="nav-item"><a class="nav-link" href="{% url 'core:category-pages' category.name %}">{{ category }} </a>
+    {% for pcat in parent_categories %}
+      {% if pcat.children.count %}
+      <li class="nav-item">
+        <a href="" class="nav-link">
+        {{ pcat }}
+        </a>
+          {% if pcat.children.count %}
+          <ul style="display: none">
+          {% for cat in pcat.children.all %}
+            {% if cat.items.count %}
+              <li class="nav-item">
+                <a href="" class="nav-link">
+                {{ cat }} ({{ cat.items.count }})
+                </a>
+              </li>
+            {% endif %}
+          {% endfor %}
+          </ul>
+          {% endif %}
       </li>
       {% endif %}
-      {% endfor %}
+    {% endfor %}
+
+    {% for cat in categories %}
+      {% if cat.items.count %}
+      <li class="nav-item">
+        <a href="{% routablepageurl page 'category_view' cat.slug %}" class="nav-link">
+        {{ cat }} ({{ cat.items.count }})
+        </a>
+      </li>
+      {% endif %}
+    {% endfor %}
 
     </ul>
-    <!-- Links -->
+    {% endif %}
 
     <form class="form-inline">
       <div class="md-form my-0">
@@ -35,3 +62,6 @@
 
 </nav>
 <!--/.Navbar-->
+
+  <small>
+  </small>

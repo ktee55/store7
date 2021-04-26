@@ -156,6 +156,12 @@
   </div>
   <!--feature-->
 
+  {% for category in self.categories.all %}
+   {{ category }}
+  {% endfor %}
+  {% for tag in self.tags.all %}
+   {{ tag }}
+  {% endfor %}
 
   <div class="recommend">
     <h6>あなたにおすすめ</h6>
