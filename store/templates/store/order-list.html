@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 {% load humanize wagtailimages_tags %}
+
 {% block head_title %}
+
 {% if history %}
 購入履歴
 {% else %}
 注文管理
 {% endif %}
-- {{ request.site.siteinfo.title }}
+
+{% with settings.site_settings.SiteInfo.site_name as site_name %}
+{% if site_name %} - {{ site_name }}{% endif %}
+{% endwith %}
+
 {% endblock %}
 
 {% block content %}

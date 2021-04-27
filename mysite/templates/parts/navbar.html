@@ -5,7 +5,11 @@
 
     <!-- Brand -->
     <a class="navbar-brand waves-effect" href="/">
-      <h1>{{ request.site.siteinfo.title }}</h1>
+      <h1>
+        {% with settings.site_settings.SiteInfo.site_name as site_name %}
+        {% if site_name %}{{ site_name }}{% endif %}
+        {% endwith %}
+      </h1>
     </a>
 
     <!-- Collapse -->

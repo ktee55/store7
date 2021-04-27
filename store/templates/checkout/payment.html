@@ -1,5 +1,11 @@
 {% extends "base.html" %}
-{% block head_title %}クレジットカード情報の入力 - {{ request.site.siteinfo.title }}{% endblock %}
+
+{% block head_title %}
+クレジットカード情報の入力
+{% with settings.site_settings.SiteInfo.site_name as site_name %}
+{% if site_name %} - {{ site_name }}{% endif %}
+{% endwith %}
+{% endblock %}
 
 {% block extra_head %}
 <style>

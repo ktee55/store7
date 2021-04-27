@@ -1,4 +1,4 @@
-#### Settings.pyに'core.context_processors.global_val'を追加 ###
+#### Settings.pyに'wagtail.contrib.settings'と'wagtail.contrib.settings.context_processors.settings'を追加 ###
 
 from store.models import ItemCategory, ItemParentCategory, TaggedItem
 # from taggit.models import Tag

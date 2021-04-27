@@ -1,7 +1,13 @@
 {% extends "base.html" %}
-{% block head_title %}ログアウト - {{ request.site.siteinfo.title }}{% endblock %}
-{% block content %}
 
+{% block head_title %}
+ログアウト
+{% with settings.site_settings.SiteInfo.site_name as site_name %}
+{% if site_name %} - {{ site_name }}{% endif %}
+{% endwith %}
+{% endblock %}
+
+{% block content %}
 
 <div id="order-list" class="container">
   <h2>ログアウトしました。</h2>

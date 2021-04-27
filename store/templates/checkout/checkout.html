@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 
-{% block head_title %}配送先住所とお支払い方法 - {{ request.site.siteinfo.title }}{% endblock %}
+{% block head_title %}
+配送先住所とお支払い方法
+{% with settings.site_settings.SiteInfo.site_name as site_name %}
+{% if site_name %} - {{ site_name }}{% endif %}
+{% endwith %}
+{% endblock %}
 
 {% block content %}
 

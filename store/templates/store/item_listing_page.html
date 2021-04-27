@@ -1,9 +1,22 @@
 {% extends "base.html" %}
 {% load humanize wagtailimages_tags wagtailroutablepage_tags %}
-{% block head_title %}Category: {{ category_name }}{% endblock %}
+
+{% block head_title %}
+{% if category %}
+Category: {{ category.name }}
+{% elif tag %}
+Tag: {{ tag.name }}
+{% else %}
+商品一覧
+{% endif %}
+
+{% with settings.site_settings.SiteInfo.site_name as site_name %}
+{% if site_name %} - {{ site_name }}{% endif %}
+{% endwith %}
+
+{% endblock %}
+
 {% block content %}
-
-
 
 <div id="item-list" class="container clearfix">
 

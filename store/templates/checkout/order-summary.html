@@ -1,7 +1,12 @@
 {% extends "base.html" %}
 {% load humanize %}
 
-{% block head_title %}ご注文内容のご確認 - {{ request.site.siteinfo.title }}{% endblock %}
+{% block head_title %}
+ご注文内容のご確認
+{% with settings.site_settings.SiteInfo.site_name as site_name %}
+{% if site_name %} - {{ site_name }}{% endif %}
+{% endwith %}
+{% endblock %}
 
 {% block content %}
 
