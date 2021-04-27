@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'core',
     'store',
     'flex',
+    'blog',
     'streams',
     'site_settings',
     'users.apps.UsersConfig',

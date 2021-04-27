@@ -2,7 +2,6 @@ from django.db import models
 from django.conf import settings
 from django.shortcuts import reverse, render
 from django.template.defaultfilters import slugify
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from modelcluster.models import ClusterableModel
@@ -20,6 +19,7 @@ from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 
 from .forms import ItemOptionForm
 from users.models import ShippingAddress, BillingAddress
+from core.views import paginate
 # from streams import blocks
 
 PAYMENT_CHOICES = (
@@ -224,7 +224,7 @@ class ItemSlideImages(Orderable):
 
   panels = [
       ImageChooserPanel("slide_image"),
-      FieldPanel("slide_img_alt", heading="代替テキスト"),
+      FieldPanel("slide_img_alt"),
   ]
 
 
@@ -476,18 +476,4 @@ class ItemListingPage(RoutablePageMixin, Page):
 #     class Meta:
 #         verbose_name = "Blog Pagination"
 #         verbose_name_plural = "Blog Paginations"
-
-
-def paginate(request, all_items, count):
-    paginator = Paginator(all_items, count)
-
-    page = request.GET.get("page")
-    try:
-        items = paginator.page(page)
-    except PageNotAnInteger:
-        items = paginator.page(1)
-    except EmptyPage:
-        items = paginator.page(page.num_pages)
-    
-    return items
 

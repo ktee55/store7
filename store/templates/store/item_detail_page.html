@@ -164,7 +164,9 @@
 
   <h6>Categories:</h6>
   {% for category in self.categories.all %}
-   {{ category }}
+    <a href="{% url 'store:category-view' category.slug %}">
+    {{ category }}
+    </a>
   {% endfor %}
   <h6>Tags:</h6>
   {% for tag in self.tags.all %}

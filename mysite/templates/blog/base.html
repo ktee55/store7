@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <title>{% block head_title %}{% endblock %}</title>
+  {% block extra_head %}
+  {% endblock %}
+
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100;300;400;500;700;900&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700,900|Oswald:200,300,400,500,600,700"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+
+  <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'css/styles.css' %}" rel="stylesheet">
+</head>
+
+<body class="blog">
+  <div class="full-height">
+    <header class="site-header">
+      {% include "parts/navbar.html" %}
+    </header>
+    <main role="main" class="container">
+      <div class="row">
+        <div class="col-md-8">
+          {% if messages %}
+          {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+          </div>
+          {% endfor %}
+          {% endif %}
+
+          {% block content %}{% endblock %}
+
+        </div>
+        <div class="col-md-4">
+          <div id="side-menu" class="content-section">
+            <ul class="list-group">
+              {% if user.is_staff %}
+              <li id="new-post-link" class="bg-warning list-group-item list-group-item-light"><a
+                  href=""><i class="far fa-edit"></i>New Post</a></li>
+              {% endif %}
+              <li id="photo-link" class="bg-info list-group-item list-group-item-light"><a
+                  href=""><i class="far fa-images"></i>Photo Album</a></li>
+            </ul>
+            <ul class="list-group">
+              {% if user.is_authenticated %}
+              <li class="list-group-item list-group-item-light">
+                Drafts
+                <ul>
+                  <!-- {% if drafts.count %} -->
+                  {% for post in draft_posts %}
+                  <li><a href="">{{ post.title }}</a></li>
+                  {% endfor %}
+                  <!-- {% else %}
+                        <p>下書きはありません</p>
+                    {% endif %} -->
+                </ul>
+              </li>
+              {% endif %}
+              <li class="list-group-item list-group-item-light">
+                Latest Posts
+                <ul>
+                  {% for post in latest_posts %}
+                  <li><a href="">{{ post.title }}</a></li>
+                  {% endfor %}
+                </ul>
+              </li>
+              <li class="list-group-item list-group-item-light">
+                Categories
+                <ul>
+                  {% for category in blog_categories %}
+                  {% if category.posts.count %}
+                  <li><a href="{% url 'blog:category-view' category.slug %}">{{ category }}
+                      ({{category.posts.count}})</a></li>
+                  {% endif %}
+                  {% endfor %}
+                </ul>
+              </li>
+              <li class="list-group-item list-group-item-light">
+                Tags
+                <ul>
+                  {% for post in tagged_posts %}
+                  <li><a href="{% url 'blog:tag-view' post.tag %}">{{ post.tag }} ({{ tag.published_posts.count }})</a></li>
+                  {% endfor %}
+                </ul>
+              </li>
+              <li class="list-group-item list-group-item-light">
+                Archives
+                <ul>
+                  {% for archive in archives %}
+                  <li><a
+                      href="/blog/archives/?month={{ archive.date_posted__month }}&year={{ archive.date_posted__year }}">
+                      {{ archive.date_posted__year }}年{{ archive.date_posted__month }}月 ({{ archive.id__count }})
+                    </a></li>
+                  {% endfor %}
+                </ul>
+              </li>
+            </ul>
+            </p>
+          </div>
+        </div>
+      </div>
+
+  </div>
+
+
+
+  <!-- Optional JavaScript -->
+  <!-- {% csrf_token %} -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.min.js"></script> -->
+  <!-- <script id="post" type="text/x-handlebars-template"></script> -->
+
+  {% include "parts/footer.html" %}
+
+</body>
+
+</html>
