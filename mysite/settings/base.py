@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'search',
     'core',
     'store',
+    'flex',
     'streams',
     'site_settings',
     'users.apps.UsersConfig',
