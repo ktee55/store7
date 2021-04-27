@@ -12,9 +12,9 @@
   {% if category %}
   <small>カテゴリー: </small>
   <h2 class="archive-heading">{{ category.name }}</h2>
-  {% elif tag_name %}
+  {% elif tag %}
   <small>タグ: </small>
-  <h2 class="archive-heading">{{ tag_name }}</h2>
+  <h2 class="archive-heading">{{ tag.name }}</h2>
   {% endif %}
 
   <div class="category-item-list">
@@ -58,6 +58,7 @@
 
 
 
+  <!-- For List(ALL) Page-->
   {# Only show pagination if there is more than one page to click through #}
   {% if items.paginator.num_pages > 1 %}
   <div class="container">
@@ -128,9 +129,14 @@
 
     <h5>Tags:</h5>
     <small>
-      {% for tag in tags %}
+      <!-- {% for tag in item_tags %}
       <a href="">
         {{ tag.name }}
+      </a>
+      {% endfor %} -->
+      {% for item in tagged_items %}
+      <a href="{% url 'store:tag-view' item.tag.slug %}">
+        {{ item.tag }}
       </a>
       {% endfor %}
     </small>

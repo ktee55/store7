@@ -162,7 +162,9 @@
   {% endfor %}
   <h6>Tags:</h6>
   {% for tag in self.tags.all %}
+  <a href="{% url 'store:tag-view' tag.slug %}">
    {{ tag }}
+  </a>
   {% endfor %}
 
   <div class="recommend">

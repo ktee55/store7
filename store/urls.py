@@ -28,4 +28,5 @@ urlpatterns = [
   path('order-dispatched/<int:pk>', order_dispatched, name='order-dispatched'),
 
   path('items/category/<str:cat_slug>/', CategoryItemListView.as_view(), name='category-view'),
+  path('items/tag/<str:tag_slug>/', TagItemListView.as_view(), name='tag-view'),
 ]

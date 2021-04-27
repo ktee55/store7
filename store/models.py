@@ -38,104 +38,6 @@ DELIVERY_TIME = (
 )
 
 
-# class ItemPagination(models.Model):
-
-#     listing_page = models.IntegerField(default=10)
-#     category_page = models.IntegerField(default=10)
-#     tag_page = models.IntegerField(default=10)
-
-#     panels = [
-#         FieldPanel("listing_page"),
-#         FieldPanel("category_page"),
-#         FieldPanel("tag_page"),
-#     ]
-
-#     class Meta:
-#         verbose_name = "Blog Pagination"
-#         verbose_name_plural = "Blog Paginations"
-
-
-def paginate(request, all_items, count):
-    paginator = Paginator(all_items, count)
-
-    page = request.GET.get("page")
-    try:
-        items = paginator.page(page)
-    except PageNotAnInteger:
-        items = paginator.page(1)
-    except EmptyPage:
-        items = paginator.page(page.num_pages)
-    
-    return items
-
-
-class ItemListingPage(RoutablePageMixin, Page):
-  """Listing page lists all the Item Detail Pages."""
-
-  template = "store/item_listing_page.html"
-  max_count = 1
-  parent_page_types = ['home.HomePage']
-  subpage_types = ['store.ItemDetailPage']
-
-  def get_context(self, request, *args, **kwargs):
-      context = super().get_context(request, *args, **kwargs)
-      all_items = ItemDetailPage.objects.live().public().order_by('-first_published_at')
-      # pagination = ItemPagination.objects.first()
-      pagination = 1
-
-      context["items"] = paginate(request, all_items, pagination)
-
-      # context["parent_categories"] = ItemParentCategory.objects.all()
-      # context["categories"] = ItemCategory.objects.filter(parent__isnull=True)
-      # context["tags"] = Tag.objects.all()
-
-      return context
-
-
-  # @route(r'^category/(?P<cat_slug>[-\w]*)/$', name="category_view")
-  # def category_view(self, request, cat_slug):
-  #     """Find items based on a category."""
-  #     context = self.get_context(request)
-
-  #     try:
-  #         category = ItemCategory.objects.get(slug=cat_slug)
-  #     except Exception:
-  #         messages.error(request, "指定されたカテゴリーは存在しませんでした。")
-  #         return redirect('/blog/')
-  #     # except BlogCategory.DoesNotExist:
-  #     #     raise Http404("このカテゴリーは存在しません。")
-
-  #     all_items = ItemDetailPage.objects.live().public().order_by('-first_published_at').filter(categories__in=[category])
-  #     # pagination = BlogPagination.objects.first()
-  #     pagination = 1
-  #     # context["items"] = paginate(request, all_items, pagination.category_page)
-  #     context["items"] = paginate(request, all_items, pagination)
-  #     context["category_name"] = category.name
-
-  #     return render(request, "store/item_listing_page.html", context)
-
-
-  @route(r'^tag/(?P<tag_slug>[-\w]*)/$', name="tag_view")
-  def tag_view(self, request, tag_slug):
-      """Find items based on a tag."""
-      context = self.get_context(request)
-
-      try:
-          tag = Tag.objects.get(slug=tag_slug)
-      except Exception:
-          messages.error(request, "指定されたタグは存在しませんでした。")
-          return redirect('/blog/')
-
-      all_items = ItemDetailPage.objects.live().public().order_by('-first_published_at').filter(tags__in=[tag])
-      # pagination = BlogPagination.objects.first()
-      pagination = 1
-      # context["items"] = paginate(request, all_items, pagination.tag_page)
-      context["items"] = paginate(request, all_items, pagination)
-      context["tag_name"] = tag.name
-      
-      return render(request, "store/item_listing_page.html", context)
-
-
 class ItemParentCategory(models.Model):
   """Parent category for item."""
 
@@ -296,8 +198,6 @@ class ItemDetailPage(Page):
     ).public().exclude(slug=self.slug).order_by('?')[:3]
     if self.fav_users.filter(id=request.user.id):
         context["already_favorite"] = True
-    # context["parent_categories"] = ItemParentCategory.objects.all()
-    # context["categories"] = ItemCategory.objects.filter(parent__isnull=True)
     return context
 
 
@@ -491,4 +391,103 @@ class Payment(models.Model):
   def __str__(self):
     return self.user.username
 
+
+
+
+class ItemListingPage(RoutablePageMixin, Page):
+  """Listing page lists all the Item Detail Pages."""
+
+  template = "store/item_listing_page.html"
+  max_count = 1
+  parent_page_types = ['home.HomePage']
+  subpage_types = ['store.ItemDetailPage']
+
+  def get_context(self, request, *args, **kwargs):
+      context = super().get_context(request, *args, **kwargs)
+      all_items = ItemDetailPage.objects.live().public().order_by('-first_published_at')
+      # pagination = ItemPagination.objects.first()
+      pagination = 1
+
+      context["items"] = paginate(request, all_items, pagination)
+
+      # context["parent_categories"] = ItemParentCategory.objects.all()
+      # context["categories"] = ItemCategory.objects.filter(parent__isnull=True)
+      # context["tagged_items"] = TagedItem.objects.all()
+
+      return context
+
+
+  # @route(r'^category/(?P<cat_slug>[-\w]*)/$', name="category_view")
+  # def category_view(self, request, cat_slug):
+  #     """Find items based on a category."""
+  #     context = self.get_context(request)
+
+  #     try:
+  #         category = ItemCategory.objects.get(slug=cat_slug)
+  #     except Exception:
+  #         messages.error(request, "指定されたカテゴリーは存在しませんでした。")
+  #         return redirect('/blog/')
+  #     # except BlogCategory.DoesNotExist:
+  #     #     raise Http404("このカテゴリーは存在しません。")
+
+  #     all_items = ItemDetailPage.objects.live().public().order_by('-first_published_at').filter(categories__in=[category])
+  #     # pagination = BlogPagination.objects.first()
+  #     pagination = 1
+  #     # context["items"] = paginate(request, all_items, pagination.category_page)
+  #     context["items"] = paginate(request, all_items, pagination)
+  #     context["category_name"] = category.name
+
+  #     return render(request, "store/item_listing_page.html", context)
+
+
+  # @route(r'^tag/(?P<tag_slug>[-\w]*)/$', name="tag_view")
+  # def tag_view(self, request, tag_slug):
+  #     """Find items based on a tag."""
+  #     context = self.get_context(request)
+
+  #     try:
+  #         tag = Tag.objects.get(slug=tag_slug)
+  #     except Exception:
+  #         messages.error(request, "指定されたタグは存在しませんでした。")
+  #         return redirect('/blog/')
+
+  #     all_items = ItemDetailPage.objects.live().public().order_by('-first_published_at').filter(tags__in=[tag])
+  #     # pagination = BlogPagination.objects.first()
+  #     pagination = 1
+  #     # context["items"] = paginate(request, all_items, pagination.tag_page)
+  #     context["items"] = paginate(request, all_items, pagination)
+  #     context["tag_name"] = tag.name
+      
+  #     return render(request, "store/item_listing_page.html", context)
+
+
+# class ItemPagination(models.Model):
+
+#     listing_page = models.IntegerField(default=10)
+#     category_page = models.IntegerField(default=10)
+#     tag_page = models.IntegerField(default=10)
+
+#     panels = [
+#         FieldPanel("listing_page"),
+#         FieldPanel("category_page"),
+#         FieldPanel("tag_page"),
+#     ]
+
+#     class Meta:
+#         verbose_name = "Blog Pagination"
+#         verbose_name_plural = "Blog Paginations"
+
+
+def paginate(request, all_items, count):
+    paginator = Paginator(all_items, count)
+
+    page = request.GET.get("page")
+    try:
+        items = paginator.page(page)
+    except PageNotAnInteger:
+        items = paginator.page(1)
+    except EmptyPage:
+        items = paginator.page(page.num_pages)
+    
+    return items
 

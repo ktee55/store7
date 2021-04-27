@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin #, UserPassesTestMixin
 from django.views.generic import View, ListView
 from taggit.models import Tag
 
-from ..models import Order, ItemDetailPage, ItemCategory, ItemParentCategory
+from ..models import Order, ItemDetailPage, ItemCategory, ItemParentCategory, TaggedItem
 from ..forms import CheckoutForm, BillingAddressForm, ItemOptionForm
 from core.boost import DynamicRedirectMixin
 from users.models import ShippingAddress, BillingAddress
@@ -32,6 +32,28 @@ class CategoryItemListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["category"] = get_object_or_404(ItemCategory, slug=self.kwargs.get('cat_slug'))
+
+        return context
+
+
+class TagItemListView(ListView):
+    model = Tag
+    template_name = 'store/item_listing_page.html'
+    context_object_name = 'items'
+    paginate_by = 1
+
+    def get_queryset(self):
+      try:
+          tag = Tag.objects.get(slug=self.kwargs.get('tag_slug'))
+      except Exception:
+          messages.error(self.request, "指定されたタグは存在しませんでした。")
+          return redirect('/blog/')
+      
+      return ItemDetailPage.objects.live().public().order_by('-first_published_at').filter(tags__in=[tag])
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["tag"] = get_object_or_404(Tag, slug=self.kwargs.get('tag_slug'))
 
         return context
 

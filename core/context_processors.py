@@ -1,7 +1,7 @@
-#### Settings.pyに'blog.context_processors.global_val'を追加 ###
+#### Settings.pyに'core.context_processors.global_val'を追加 ###
 
-from .models import ItemCategory, ItemParentCategory
-from taggit.models import Tag
+from store.models import ItemCategory, ItemParentCategory, TaggedItem
+# from taggit.models import Tag
 # from django.db.models import Count
 
 
@@ -18,7 +18,8 @@ def global_val(request):
         # 'post_tags': Tag.objects.annotate(num_posts=Count('posts')).order_by('-num_posts'),
         # 'archives': archives
         
-        "categories": ItemCategory.objects.filter(parent__isnull=True),
-        "parent_categories": ItemParentCategory.objects.all(),
-        "tags": Tag.objects.all()
+        "item_categories": ItemCategory.objects.filter(parent__isnull=True),
+        "item_parent_categories": ItemParentCategory.objects.all(),
+        # "tags": Tag.objects.all()
+        "tagged_items": TaggedItem.objects.all()
     }

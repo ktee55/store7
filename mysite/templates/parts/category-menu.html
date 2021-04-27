@@ -14,9 +14,9 @@
   <!-- Collapsible content -->
   <div class="collapse navbar-collapse">
 
-    {% if parent_categories.count or categories.count %}
+    {% if item_parent_categories.count or item_categories.count %}
     <ul class="navbar-nav mr-auto">
-    {% for pcat in parent_categories %}
+    {% for pcat in item_parent_categories %}
       {% if pcat.children.count %}
       <li class="nav-item">
         <a href="" class="nav-link">
@@ -27,7 +27,7 @@
           {% for cat in pcat.children.all %}
             {% if cat.items.count %}
               <li class="nav-item">
-                <a href="" class="nav-link">
+                <a href="{% url 'store:category-view' cat.slug %}" class="nav-link">
                 {{ cat }} ({{ cat.items.count }})
                 </a>
               </li>
@@ -39,7 +39,8 @@
       {% endif %}
     {% endfor %}
 
-    {% for cat in categories %}
+    <!-- val item_categories from core.context_processors -->
+    {% for cat in item_categories %}
       {% if cat.items.count %}
       <li class="nav-item">
         <a href="{% url 'store:category-view' cat.slug %}" class="nav-link">
