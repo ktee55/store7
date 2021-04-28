@@ -45,7 +45,7 @@ class BlogPostAdmin(ModelAdmin):
   model = BlogDetailPage
   menu_label = "投稿"
   menu_icon = "folder"
-  list_display = ("title", "get_categories", "get_tags", "first_published_at")
+  list_display = ("title", "owner", "get_categories", "get_tags", "first_published_at")
   search_fields = ("title", "content")
 
   def get_categories(self, obj):

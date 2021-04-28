@@ -21,14 +21,16 @@
 <div id="post-list">
   {% for post in posts %}
   <article class="media content-section">
-    {% image self.blog_authors.first.author.image max-100x100 as img %}
-    <img src="{{ img.url }}" alt="" class="rounded-circle article-img">
+    <img src="{{ self.owner.profile.image.url }}" alt="" class="rounded-circle article-img">
+    <!-- {% image self.blog_authors.first.author.image max-100x100 as img %}
+    <img src="{{ img.url }}" alt="" class="rounded-circle article-img"> -->
     <div class="media-body">
       <div class="article-metadata">
-        {% for loop_cycle in self.blog_authors.all %}
+        <a class="mr-2" href="">{{ self.owner }}</a>
+        <!-- {% for loop_cycle in self.blog_authors.all %}
         <a class="mr-2" href="">{{ loop_cycle.author.name }}</a>
-        {% endfor %}
-        <small class="text-muted">{{ post.date_posted|date:"Y-m-j" }}</small>
+        {% endfor %} -->
+        <small class="text-muted">{{ self.first_published_at|date:"Y-m-j" }}</small>
       </div>
       <h2>
         <a class="article-title" href="{{ post.url }}">{{ post.title }}</a>

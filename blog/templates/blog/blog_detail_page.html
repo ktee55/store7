@@ -4,9 +4,8 @@
 {% block content %}
 
 <div id="post-detail">
-
   <div class="media content-section">
-    <img src="{{ post.author.profile.image.url }}" alt="" class="rounded-circle article-img">
+    <img src="{{ self.owner.profile.image.url }}" alt="" class="rounded-circle article-img">
     <div class="media-body">
       <article>
         <!-- post -->
@@ -14,10 +13,8 @@
           <!-- post header -->
           <div class="article-metadata">
             <i class="fas fa-user"></i>
-            {% for loop_cycle in self.blog_authors.all %}
-            <a class="mr-2" href="">{{ loop_cycle.author.name }}</a>
-            {% endfor %}
-            <small class="text-muted">{{ post.date_posted|date:"Y-m-j" }}</small>
+            <a class="mr-2" href="">{{ self.owner }}</a>
+            <small class="text-muted">{{ self.first_published_at|date:"Y-m-j" }}</small>
             <!-- <small class="text-muted">{{ post.date_posted }}</small> -->
             <!-- 投稿者にのみ編集ボタンを表示させる -->
             <!-- {% if post.author == user %}
@@ -61,6 +58,11 @@
         </div>
         {% endif %}
 
+          <small>Other Authors:</small>
+          {% for loop_cycle in self.blog_authors.all %}
+          <a class="mr-2" href="">{{ loop_cycle.author.name }}</a>
+          {% endfor %}
+
         <footer>
           <!-- post footer -->
           <small>カテゴリー:
@@ -87,7 +89,7 @@
       </article> <!-- post -->
 
       <div class="comment-list">
-        {% for comment in post.comments_ordered.all %}
+        {% for comment in self.comments.all %}
         <article>
 
           <!-- A -->
@@ -103,12 +105,13 @@
               <small class="text-muted">{{ comment.date_posted|date:"Y-m-j" }}</small>
             </div>
 
-            {% if not comment.approved_comment %}
-            {% if post.author == user %}
+            {% if not comment.approved %}
+            <!-- {% if user == self.owner %} -->
+            {% if user.is_staff %}
             <div>
               <a class="btn btn-outline-primary btn-sm mt-1 mb-1"
-                href="{% url 'comment_approve' pk=comment.pk %}">承認する</a>
-              <a class="btn btn-outline-danger btn-sm mt-1 mb-1" href="{% url 'comment-delete' comment.id %}">削除する</a>
+                href="{% url 'blog:comment_approve' pk=comment.pk %}">承認する</a>
+              <a class="btn btn-outline-danger btn-sm mt-1 mb-1" href="{% url 'blog:comment-delete' comment.id %}">削除する</a>
             </div>
             {% endif %}
             {% if comment.author == user %}
@@ -122,8 +125,8 @@
             {% if comment.author == user %}
             <div>
               <a class="btn btn-outline-secondary btn-sm mt-1 mb-1"
-                href="{% url 'comment-update' comment.id %}">編集する</a>
-              <a class="btn btn-outline-danger btn-sm mt-1 mb-1" href="{% url 'comment-delete' comment.id %}">削除する</a>
+                href="{% url 'blog:comment-update' comment.id %}">編集する</a>
+              <a class="btn btn-outline-danger btn-sm mt-1 mb-1" href="{% url 'blog:comment-delete' comment.id %}">削除する</a>
             </div>
             {% endif %}
           </header> <!-- comment header -->
@@ -152,7 +155,7 @@
         <!-- comment-form -->
         <img src="{{ user.profile.image.url }}" alt="" class="rounded-circle comment-img"> {{ user }}
         <div id="add_comment">
-          <form method="POST" action="" class="post-form">
+          <form method="POST" action="{% url 'blog:comment-create' self.id %}" class="post-form">
             {% csrf_token %}
             <fieldset class="form-group">
               {% load crispy_forms_tags %}

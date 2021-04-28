@@ -1,4 +1,4 @@
-{% load static %}
+{% load static wagtailuserbar %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -21,6 +21,7 @@
 </head>
 
 <body class="blog">
+  {% wagtailuserbar %}
   <div class="full-height">
     <header class="site-header">
       {% include "parts/navbar.html" %}
@@ -42,12 +43,12 @@
         <div class="col-md-4">
           <div id="side-menu" class="content-section">
             <ul class="list-group">
-              {% if user.is_staff %}
+              <!-- {% if user.is_staff %}
               <li id="new-post-link" class="bg-warning list-group-item list-group-item-light"><a
                   href=""><i class="far fa-edit"></i>New Post</a></li>
-              {% endif %}
-              <li id="photo-link" class="bg-info list-group-item list-group-item-light"><a
-                  href=""><i class="far fa-images"></i>Photo Album</a></li>
+              {% endif %} -->
+              <!-- <li id="photo-link" class="bg-info list-group-item list-group-item-light"><a
+                  href=""><i class="far fa-images"></i>Photo Album</a></li> -->
             </ul>
             <ul class="list-group">
               {% if user.is_authenticated %}

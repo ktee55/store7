@@ -4,7 +4,8 @@ from django.shortcuts import redirect
 from django.contrib import messages
 from django.db import models
 from django.shortcuts import render
-# from django.contrib.auth.models import User
+from django.utils import timezone
+from django.contrib.auth.models import User
 from django.template.defaultfilters import slugify
 
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
@@ -21,6 +22,12 @@ from wagtail.snippets.models import register_snippet
 
 from streams import blocks
 from core.views import paginate
+# from .forms import CommentForm
+
+### To Avoid Circulate Import Error
+def CommentForm():
+  from .forms import CommentForm
+  return CommentForm
 
 
 class BlogAuthorsOrderable(Orderable):
@@ -202,13 +209,10 @@ class BlogDetailPage(Page):
     parent_page_types = ['blog.BlogListingPage']
     subpage_types = []
 
-    # author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts", null=True, blank=True)
-
-
     categories = ParentalManyToManyField("blog.BlogCategory", blank=True, related_name="posts")
     tags = ClusterTaggableManager(through=TaggedPost, blank=True)
 
-    content = StreamField(
+    other_contents = StreamField(
         [
             ("title_and_text", blocks.TitleAndTextBlock()),
             ("full_richtext", blocks.RichTextBlock()),
@@ -233,17 +237,17 @@ class BlogDetailPage(Page):
         FieldPanel("categories", widget=forms.CheckboxSelectMultiple),
         FieldPanel("tags"),
         InlinePanel("main_contents", label="コンテント"),
-        StreamFieldPanel("content"),
+        StreamFieldPanel("other_contents"),
         InlinePanel("links", label="参照URL"),
     ]
 
+    def get_context(self, request, *args, **kwargs):
+        context = super().get_context(request, *args, **kwargs)
+        context['comment_form'] = CommentForm()
+        return context
 
-    ### didn't work. How? ###
-    # def form_valid(self, form):
-    #   form.instance.author = self.request.user
-    #   return super().form_valid(form)
-
-    # First subclassed blog post
+    def approved_comments(self):
+        return self.comments.filter(approved=True)
 
 
 class BlogContent(Orderable):
@@ -310,4 +314,29 @@ class BlogLink(Orderable):
 #         verbose_name_plural = "Blog Paginations"
 
 
-    
+class BlogComment(models.Model):
+    comment = models.TextField(verbose_name="コメント")
+    date_posted = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="comments")
+    post = models.ForeignKey(
+        BlogDetailPage, on_delete=models.CASCADE, related_name="comments")
+    approved = models.BooleanField(default=False)
+    url = models.URLField(max_length=255, blank=True,
+                          verbose_name="参照URL(option)")
+
+    class Meta:
+        verbose_name = "コメント"
+        verbose_name_plural = "コメント"
+
+    def __str__(self):
+        return f"{self.comment}"
+
+    # def get_absolute_url(self):
+    #     # going back to the post that comment attached
+    #     return reverse('post-detail', kwargs={'pk': self.post.pk})
+
+    def approve(self):
+        self.approved = True
+        self.save()
+
