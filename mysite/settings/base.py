@@ -26,6 +26,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 INSTALLED_APPS = [
     'home',
     'search',
+    'menus',
     'core',
     'store',
     'flex',
@@ -53,6 +54,7 @@ INSTALLED_APPS = [
     'modelcluster',
     'taggit',
     'crispy_forms',
+    'wagtailmenus',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -62,6 +64,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
 
+    # 'django_extensions',
     'captcha',
     'wagtailcaptcha',
 ]
@@ -95,6 +98,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 
                 'wagtail.contrib.settings.context_processors.settings',
+                'wagtailmenus.context_processors.wagtailmenus',
                 'core.context_processors.global_val',
             ],
         },
