@@ -3,6 +3,7 @@ from wagtail.core.models import Page
 # from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 
 from store.models import ItemDetailPage
+from blog.models import BlogDetailPage
 
 
 class HomePage(Page):
@@ -15,6 +16,6 @@ class HomePage(Page):
     context["items"] = ItemDetailPage.objects.live().public().filter(featured=True).order_by('?')[:12]
     context["pickup_item"] = ItemDetailPage.objects.live().public().filter(
         pickup=True).order_by('-id').first()
-    # context["posts"] = Post.objects.filter(draft=False, whatsnew=True).order_by('-date_posted')[:2]
+    context["posts"] = BlogDetailPage.objects.filter(draft=False, whatsnew=True).order_by('-first_published_at')[:2]
 
     return context

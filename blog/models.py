@@ -211,6 +211,8 @@ class BlogDetailPage(Page):
 
     categories = ParentalManyToManyField("blog.BlogCategory", blank=True, related_name="posts")
     tags = ClusterTaggableManager(through=TaggedPost, blank=True)
+    draft = models.BooleanField(default=False, verbose_name="下書きにする")
+    whatsnew = models.BooleanField(default=False, verbose_name="What's New")
 
     other_contents = StreamField(
         [
@@ -239,6 +241,10 @@ class BlogDetailPage(Page):
         InlinePanel("main_contents", label="コンテント"),
         StreamFieldPanel("other_contents"),
         InlinePanel("links", label="参照URL"),
+        MultiFieldPanel([
+            FieldPanel("draft"),
+            FieldPanel("whatsnew"),
+        ], heading="Other Options"),
     ]
 
     def get_context(self, request, *args, **kwargs):

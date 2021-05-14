@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load humanize wagtailimages_tags %}
+{% load humanize wagtailimages_tags wagtailcore_tags %}
 {% block head_title %}
 {% with settings.site_settings.SiteInfo.site_name as site_name %}
 {% if site_name %}{{ site_name }}{% endif %}
@@ -87,9 +87,9 @@
             <div class="montn-item">{{ post.date_posted|date:"M" }}</div>
           </div>
           <div>
-            <h2><a class="article-title" href=" {% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
-            <p class="article-content"> {{ post.content | safe | slice:":60" }}.....</p>
-            <a href="{% url 'post-detail' post.id %}" class="continue">Read More</a>
+            <h2><a class="article-title" href="{{ post.url }}">{{ post.title }}</a></h2>
+            <p class="article-content"> {{ post.main_contents.first.text | richtext | slice:":100" }}.....</p>
+            <a href="{{ post.url }}" class="continue">Read More</a>
 
           </div>
         </li>
