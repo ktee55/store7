@@ -26,8 +26,8 @@ class FormField(AbstractFormField):
     related_name='form_fields'
   )
 
-# class ContactPage(AbstractEmailForm):
-class ContactPage(WagtailCaptchaEmailForm):
+class ContactPage(AbstractEmailForm):
+# class ContactPage(WagtailCaptchaEmailForm):
 
   parent_page_types = ['home.HomePage']
   subpage_types = []
