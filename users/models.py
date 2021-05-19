@@ -12,8 +12,8 @@ from django.core.files.storage import default_storage as storage
 ### Don't miss signals.py and apps.py to produce Profile when User Created ###
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    image = models.ImageField(blank=True, null=True,
-                              upload_to='profile_pics', verbose_name="プロフィール画像")
+    avatar = models.ImageField(default='profile_pics/default.png', upload_to='profile_pics', verbose_name="プロフィール画像")
+    # avatar = models.ImageField(blank=True, null=True, upload_to='profile_pics', verbose_name="プロフィール画像")
 
     class Meta:
         verbose_name_plural = "プロフィール"
@@ -25,13 +25,13 @@ class Profile(models.Model):
         super(Profile, self).save(*args, **kwargs)
 
         # S3でエラー
-        # img = Image.open(self.image.path)
-        img = Image.open(storage.open(self.image.name))
+        img = Image.open(self.avatar.path)
+        # img = Image.open(storage.open(self.image.name))
 
         if img.height > 300 or img.width > 300:
             output_size = (300, 300)
             img.thumbnail(output_size)
-            img.save(self.image.path)
+            img.save(self.avatar.path)
 
 
 class ShippingAddress(models.Model):

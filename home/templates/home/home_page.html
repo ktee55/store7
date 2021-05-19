@@ -83,8 +83,8 @@
         {% for post in posts %}
         <li>
           <div class="entry-date-wrap">
-            <div class="date-item">{{ post.date_posted|date:"j" }}</div>
-            <div class="montn-item">{{ post.date_posted|date:"M" }}</div>
+            <div class="date-item">{{ post.first_published_at |date:"j" }}</div>
+            <div class="montn-item">{{ post.first_published_at |date:"M" }}</div>
           </div>
           <div>
             <h2><a class="article-title" href="{{ post.url }}">{{ post.title }}</a></h2>

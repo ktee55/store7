@@ -5,7 +5,9 @@
 
 <div id="post-detail">
   <div class="media content-section">
-    <img src="{{ self.owner.profile.image.url }}" alt="" class="rounded-circle article-img">
+    {% if self.owner.profile.avatar %}
+    <img src="{{ self.owner.profile.avatar.url }}" alt="" class="rounded-circle article-img">
+    {% endif %}
     <div class="media-body">
       <article>
         <!-- post -->
@@ -93,13 +95,15 @@
         <article>
 
           <!-- A -->
-          {% if comment.approved_comment or post.author == user or comment.author == user %}
+          {% if comment.approved or self.owner == user or comment.author == user %}
 
           <header>
             <!-- comment header -->
             <div class="comment-head">
               <div>
-                <img src="{{ comment.author.profile.image.url }}" alt="" class="rounded-circle comment-img mr-2">
+                {% if comment.author.profile.avatar %}
+                <img src="{{ comment.author.profile.avatar.url }}" alt="" class="rounded-circle comment-img mr-2">
+                {% endif %}
                 <p>{{ comment.author }}</p>
               </div>
               <small class="text-muted">{{ comment.date_posted|date:"Y-m-j" }}</small>
@@ -152,7 +156,9 @@
       {% if user.is_authenticated %}
       <div>
         <!-- comment-form -->
-        <img src="{{ user.profile.image.url }}" alt="" class="rounded-circle comment-img"> {{ user }}
+        {% if user.profile.avatar %}
+        <img src="{{ user.profile.avatar.url }}" alt="" class="rounded-circle comment-img"> {{ user }}
+        {% endif %}
         <div id="add_comment">
           <form method="POST" action="{% url 'blog:comment-create' self.id %}" class="post-form">
             {% csrf_token %}

@@ -81,7 +81,7 @@
         </li>
         {% else %}
         <li class="nav-item">
-          <a class="nav-link waves-effect" href="{% url 'account_login' %}">
+          <a class="nav-link waves-effect" href="{% url 'account_login' %}?next={{ request.path }}">
             <span class="clearfix d-sm-inline-block"><i class="fas fa-sign-in-alt"></i>ログイン</span>
           </a>
         </li>
