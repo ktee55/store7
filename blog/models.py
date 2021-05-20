@@ -79,8 +79,8 @@ class BlogAuthor(models.Model):
         return self.name
 
     class Meta:  # noqa
-        verbose_name = "Blog Author"
-        verbose_name_plural = "Blog Authors"
+        verbose_name = "その他執筆者"
+        verbose_name_plural = "その他執筆者"
 
 
 register_snippet(BlogAuthor)
@@ -106,8 +106,8 @@ class BlogParentCategory(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = "親カテゴリー"
-        verbose_name_plural = "親カテゴリー"
+        verbose_name = "ブログ親カテゴリー"
+        verbose_name_plural = "ブログ親カテゴリー"
         ordering = ["name"]
 
     # # slugを自動的に作成
@@ -141,8 +141,8 @@ class BlogCategory(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = "Blog Category"
-        verbose_name_plural = "Blog Categories"
+        verbose_name = "ブログカテゴリー"
+        verbose_name_plural = "ブログカテゴリー"
         ordering = ["name"]
 
 
@@ -209,10 +209,10 @@ class BlogDetailPage(Page):
     parent_page_types = ['blog.BlogListingPage']
     subpage_types = []
 
-    categories = ParentalManyToManyField("blog.BlogCategory", blank=True, related_name="posts")
+    categories = ParentalManyToManyField("blog.BlogCategory", blank=True, related_name="posts", verbose_name="カテゴリー")
     tags = ClusterTaggableManager(through=TaggedPost, blank=True)
     draft = models.BooleanField(default=False, verbose_name="下書きにする")
-    whatsnew = models.BooleanField(default=False, verbose_name="What's New")
+    whatsnew = models.BooleanField(default=False, verbose_name="What's Newに表示")
 
     other_contents = StreamField(
         [
@@ -225,27 +225,32 @@ class BlogDetailPage(Page):
         ],
         null=True,
         blank=True,
-        verbose_name="Additional Contents"
+        verbose_name="追加コンテンツ"
     )
 
     content_panels = Page.content_panels + [
-        MultiFieldPanel(
-            [
-                InlinePanel("blog_authors", label="Author",
-                            min_num=1, max_num=4)
-            ],
-            heading="Author(s)"
-        ),
-        FieldPanel("categories", widget=forms.CheckboxSelectMultiple),
-        FieldPanel("tags"),
-        InlinePanel("main_contents", label="コンテント"),
+        MultiFieldPanel([
+          InlinePanel("main_contents", min_num=1, label="ブロック"),
+        ], heading="本文"),
         StreamFieldPanel("other_contents"),
         InlinePanel("links", label="参照URL"),
+        FieldPanel("categories", widget=forms.CheckboxSelectMultiple),
+        FieldPanel("tags"),
         MultiFieldPanel([
             FieldPanel("draft"),
             FieldPanel("whatsnew"),
         ], heading="Other Options"),
+        MultiFieldPanel(
+            [
+                InlinePanel("blog_authors", label="その他執筆者", max_num=4)
+            ],
+            heading="その他執筆者"
+        ),
     ]
+
+    class Meta:
+      verbose_name = '投稿'
+      verbose_name_plural = '投稿'
 
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)

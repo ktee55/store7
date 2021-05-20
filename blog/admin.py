@@ -39,6 +39,8 @@ from .models import BlogDetailPage, BlogParentCategory, BlogCategory, BlogAuthor
 #   def get_tags(self, obj):
 #     return ",\n".join([tag.name for tag in obj.tags.all()])
 
+from django.contrib import admin
+admin.site.register(BlogDetailPage)
 
 class BlogPostAdmin(ModelAdmin):
 
