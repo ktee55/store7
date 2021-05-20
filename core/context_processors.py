@@ -8,8 +8,8 @@ from blog.models import BlogDetailPage, BlogCategory, BlogParentCategory, Tagged
 
 
 def global_val(request):
-    # archives = Post.objects.filter(draft=False).values(
-    #     'date_posted__year', 'date_posted__month').annotate(Count('id')).order_by()
+    archives = BlogDetailPage.objects.filter(draft=False).values(
+        'first_published_at__year', 'first_published_at__month').annotate(Count('id')).order_by()
 
     return {
         "item_categories": ItemCategory.objects.filter(parent__isnull=True),
@@ -22,7 +22,7 @@ def global_val(request):
         # 'blog_categories': BlogCategory.objects.all(),
         'blog_categories': BlogCategory.objects.annotate(num_posts=Count('posts')).order_by('-num_posts'),
         # 'post_tags': Tag.objects.annotate(num_posts=Count('posts')).order_by('-num_posts'),
-        "tagged_posts": TaggedPost.objects.all()
+        "tagged_posts": TaggedPost.objects.all(),
 
-        # 'archives': archives
+        'archives': archives
     }

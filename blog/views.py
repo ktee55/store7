@@ -56,6 +56,19 @@ class TagPostListView(ListView):
         return context
 
 
+def archives(request):
+    month = request.GET.get('month')
+    year = request.GET.get('year')
+    posts = BlogDetailPage.objects.filter(first_published_at__year=year, first_published_at__month=month, draft=False).order_by('-first_published_at')
+    context = {
+        'posts': posts,
+        'is_archives': 1,
+        'month': month,
+        'year': year
+    }
+    return render(request, 'blog/blog_listing_page.html', context)
+
+
 @login_required
 def add_comment(request, post_id):
     post = get_object_or_404(BlogDetailPage, pk=post_id)
