@@ -14,6 +14,11 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 import django_heroku
 
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
+
+# DEBUG = True
+DEBUG = (os.getenv('DEGUG_VALLUE') == 'True')
+
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 
@@ -74,6 +79,7 @@ INSTALLED_APPS = [
     # 'django_extensions',
     'captcha',
     'wagtailcaptcha',
+    'storages'
 ]
 
 SITE_ID = 1
@@ -230,4 +236,26 @@ ACCOUNT_USERNAME_BLACKLIST = ["ko", "admin", "god"]
 ACCOUNT_USERNAME_MIN_LENGTH = 2
 
 
-django_heroku.settings(locals())
+if ENVIRONMENT == 'production':
+
+    django_heroku.settings(locals())
+
+    DEFAULT_FILE_STORAGE = 'core.storages.CustomS3Boto3Storage'
+
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+
+    AWS_S3_FILE_OVERWRITE = False
+    AWS_DEFAULT_ACL = None
+    # https を有効にします
+    AWS_S3_SECURE_URLS = True
+    # 認証クエリーを無効にします
+    AWS_QUERYSTRING_AUTH = False
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS')
