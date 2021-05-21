@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
-from django.contrib.auth.mixins import LoginRequiredMixin #, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import View, ListView
 from taggit.models import Tag
 
@@ -224,3 +224,25 @@ class OrderSummaryView(LoginRequiredMixin, View):
         except ObjectDoesNotExist:
             messages.error(self.request, "カートに何も入ってません。")
             return render(self.request, 'checkout/order-summary.html')
+
+
+class OrderListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+
+    model = Order
+    template_name = 'store/order-list.html'
+    context_object_name = 'orders'
+    # paginate_by = Site.objects.get_current().siteinfo.order_list_paginate_by
+
+    def get_queryset(self):
+        return Order.objects.filter(ordered=True).order_by('-ordered_date')
+
+    # ユーザーがスタッフの時にのみ許可
+    def test_func(self):
+        if self.request.user.is_staff:
+            return True
+        return False
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["list_for_staff"] = 1
+        return context

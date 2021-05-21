@@ -364,16 +364,16 @@ class Order(models.Model):
     #   return site_info.shipping_fee
     return 0
 
-  def to_free_postage(self):
-    site_info = Site.objects.get_current().siteinfo
-    if site_info.free_shippment_line:
-      return Site.objects.get_current().siteinfo.free_shippment_line - self.get_total()
+  # def to_free_postage(self):
+  #   site_info = Site.objects.get_current().siteinfo
+  #   if site_info.free_shippment_line:
+  #     return Site.objects.get_current().siteinfo.free_shippment_line - self.get_total()
 
   def get_total_w_postage(self):
     return self.get_total() + self.get_postage()
 
   def get_order_dispatched(self):
-    return reverse("core:order-dispatched", kwargs={
+    return reverse("store:order-dispatched", kwargs={
         'pk': self.pk
     })
 
