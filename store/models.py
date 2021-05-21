@@ -354,20 +354,24 @@ class Order(models.Model):
 
   def get_postage(self):
     total = self.get_total()
-    # site_info = Site.objects.get_current().siteinfo
-    # if site_info.free_shippment_line:
-    #   if total > site_info.free_shippment_line:
-    #     return 0
-    #   else:
-    #     return site_info.shipping_fee
-    # else:
-    #   return site_info.shipping_fee
-    return 0
+    if OrderInfo.objects.exists():
+      free_shippment_line = OrderInfo.objects.first().free_shippment_line
+      shipping_fee = OrderInfo.objects.first().shipping_fee
+      if free_shippment_line:
+        if total > free_shippment_line:
+          return 0
+        else:
+          return shipping_fee
+      else:
+        return shipping_fee
+    else:
+      return 0
 
-  # def to_free_postage(self):
-  #   site_info = Site.objects.get_current().siteinfo
-  #   if site_info.free_shippment_line:
-  #     return Site.objects.get_current().siteinfo.free_shippment_line - self.get_total()
+  def to_free_postage(self):
+    if OrderInfo.objects.exists():
+      free_shippment_line = OrderInfo.objects.first().free_shippment_line
+      if free_shippment_line:
+        return free_shippment_line - self.get_total()
 
   def get_total_w_postage(self):
     return self.get_total() + self.get_postage()
@@ -477,3 +481,13 @@ class ItemListingPage(RoutablePageMixin, Page):
 #         verbose_name = "Blog Pagination"
 #         verbose_name_plural = "Blog Paginations"
 
+
+class OrderInfo(models.Model):
+    free_shippment_line = models.IntegerField(verbose_name='送料無料最低価格', null=True, blank=True)
+    shipping_fee = models.IntegerField(verbose_name='送料', default=0)
+    order_history_paginate_by = models.IntegerField(default=5, verbose_name="購入履歴1ページ表示数")
+    order_list_paginate_by = models.IntegerField(default=5, verbose_name="注文管理1ページ表示数")
+
+    class Meta:
+        verbose_name = "注文関連設定"
+        verbose_name_plural = "注文関連設定"

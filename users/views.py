@@ -14,7 +14,7 @@ from core.boost import DynamicRedirectMixin
 from django.contrib.auth.models import User
 # from django.contrib.sites.models import Site
 from .models import ShippingAddress, BillingAddress
-from store.models import Order, ItemDetailPage, ItemCategory
+from store.models import Order, ItemDetailPage, ItemCategory, OrderInfo
 from .forms import ShippingAddressForm, PrimaryShippingAddressForm, BillingAddressForm, PrimaryBillingAddressForm, UserUpdateForm, ProfileUpdateForm
 from store.forms import ItemOptionForm
 
@@ -81,8 +81,10 @@ class OrderHistoryView(LoginRequiredMixin, ListView):
     model = Order
     template_name = 'store/order-list.html'
     context_object_name = 'orders'
-    # paginate_by = Site.objects.get_current().siteinfo.order_history_paginate_by
-    paginate_by = 3
+    if OrderInfo.objects.exists():
+      paginate_by = OrderInfo.objects.first().order_history_paginate_by
+    else:
+      paginate_by = 5
 
     def get_queryset(self):
         # user = get_object_or_404(User, pk=self.kwargs.get('pk'))

@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import View, ListView
 from taggit.models import Tag
 
-from ..models import Order, ItemDetailPage, ItemCategory, ItemParentCategory
+from ..models import Order, ItemDetailPage, ItemCategory, ItemParentCategory, OrderInfo
 from ..forms import CheckoutForm, BillingAddressForm, ItemOptionForm
 from core.boost import DynamicRedirectMixin
 from users.models import ShippingAddress, BillingAddress
@@ -231,7 +231,10 @@ class OrderListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
     model = Order
     template_name = 'store/order-list.html'
     context_object_name = 'orders'
-    # paginate_by = Site.objects.get_current().siteinfo.order_list_paginate_by
+    if OrderInfo.objects.exists():
+      paginate_by = OrderInfo.objects.first().order_list_paginate_by
+    else:
+      paginate_by = 5
 
     def get_queryset(self):
         return Order.objects.filter(ordered=True).order_by('-ordered_date')
@@ -246,3 +249,5 @@ class OrderListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
         context = super().get_context_data(**kwargs)
         context["list_for_staff"] = 1
         return context
+
+

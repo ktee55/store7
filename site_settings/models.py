@@ -18,6 +18,10 @@ class SiteInfo(BaseSetting):
     FieldPanel("site_name"),
   ]
 
+  class Meta:
+    verbose_name = 'サイト設定'
+    verbose_name_plural = 'サイト設定'
+
 
 @register_setting
 class SubscriptionForm(BaseSetting):
