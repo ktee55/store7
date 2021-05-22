@@ -25,7 +25,7 @@ urlpatterns = [
         remove_from_fav_items, name='remove-from-fav-items'),
 
   path('confirm-order/', confirm_order, name='confirm-order'),
-  path('order-list', OrderListView.as_view(), name='order-list'),
+  path('order-list/', order_list, name='order-list'),
   path('order-dispatched/<int:pk>', order_dispatched, name='order-dispatched'),
 
   path('items/category/<str:cat_slug>/', CategoryItemListView.as_view(), name='category-view'),

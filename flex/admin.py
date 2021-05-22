@@ -9,7 +9,7 @@ class FlexPageAdmin(ModelAdmin):
   model = FlexPage
   menu_label = "Flex Pages"
   menu_icon = "folder"
-  menu_order = 300
+  menu_order = 310
   add_to_settings_menu = False
   exclude_from_explorer = False
   list_display = ("title", "first_published_at")

@@ -4,7 +4,7 @@ from wagtail.contrib.modeladmin.options import (
   ModelAdminGroup,
   modeladmin_register,
 )
-from .models import BlogDetailPage, BlogParentCategory, BlogCategory, BlogAuthor, BlogListingPage
+from .models import BlogDetailPage, BlogParentCategory, BlogCategory, BlogAuthor, BlogListingPage, BlogPagination
 
 
 # class ArticlePostAdmin(ModelAdmin):
@@ -87,16 +87,16 @@ class BlogListAdmin(ModelAdmin):
   menu_icon = "placeholder"
   list_display = ['title']
 
-# class BlogPaginationAdmin(ModelAdmin):
+class BlogPaginationAdmin(ModelAdmin):
 
-#   model = BlogPagination
-#   menu_label = "Pagination"
-#   menu_icon = "placeholder"
+  model = BlogPagination
+  menu_label = "Blog Pagination"
+  menu_icon = "placeholder"
 
 class BlogAdminGroup(ModelAdminGroup):
     menu_label = "Blog"
     menu_icon = "folder-open-1"
-    menu_order = 290
-    items = (BlogPostAdmin, BlogParentCategoryAdmin, BlogCategoryAdmin, BlogAuthorAdmin, BlogListAdmin)
+    menu_order = 300
+    items = (BlogPostAdmin, BlogParentCategoryAdmin, BlogCategoryAdmin, BlogAuthorAdmin, BlogListAdmin, BlogPaginationAdmin)
 
 modeladmin_register(BlogAdminGroup)

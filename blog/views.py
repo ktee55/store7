@@ -1,36 +1,55 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import Http404
 from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required #, permission_required
 from django.core.mail import send_mail
 from django.views.generic import ListView
 from taggit.models import Tag
 
-from .models import BlogDetailPage, BlogCategory, BlogComment
+from .models import BlogDetailPage, BlogCategory, BlogComment, BlogPagination
 from .forms import CommentForm
+from core.views import paginate
 
-class CategoryPostListView(ListView):
-    model = BlogDetailPage
-    template_name = 'blog/blog_listing_page.html'
-    context_object_name = 'posts'
-    paginate_by = 1
 
-    def get_queryset(self):
-      # try:
-      #     category = BlogCategory.objects.get(slug=self.kwargs.get('cat_slug'))
-      # except Exception:
-      #     messages.error(self.request, "指定されたカテゴリーは存在しませんでした。")
-      #     return redirect('/blog/')
-      category = get_object_or_404(BlogCategory, slug=self.kwargs.get('cat_slug'))
+def category_posts(request, cat_slug):
+  category = get_object_or_404(BlogCategory, slug=cat_slug)
+  
+  all_posts = category.posts.live().public().order_by('-first_published_at')
+  if BlogPagination.objects.first():
+    pagination = BlogPagination.objects.first().category_page
+  else:
+    pagination = 5
+
+  context = {
+    'category': category,
+    'posts': paginate(request, all_posts, pagination),
+  }
+  return render(request, 'blog/blog_listing_page.html', context)
+
+
+# class CategoryPostListView(ListView):
+#     model = BlogDetailPage
+#     template_name = 'blog/blog_listing_page.html'
+#     context_object_name = 'posts'
+#     paginate_by = 1
+
+#     def get_queryset(self):
+#       # try:
+#       #     category = BlogCategory.objects.get(slug=self.kwargs.get('cat_slug'))
+#       # except Exception:
+#       #     messages.error(self.request, "指定されたカテゴリーは存在しませんでした。")
+#       #     return redirect('/blog/')
+#       category = get_object_or_404(BlogCategory, slug=self.kwargs.get('cat_slug'))
       
-      # return BlogDetailPage.objects.live().public().order_by('-first_published_at').filter(categories__in=[category])
-      return category.posts.live().public().order_by('-first_published_at')
+#       # return BlogDetailPage.objects.live().public().order_by('-first_published_at').filter(categories__in=[category])
+#       return category.posts.live().public().order_by('-first_published_at')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["category"] = get_object_or_404(BlogCategory, slug=self.kwargs.get('cat_slug'))
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context["category"] = get_object_or_404(BlogCategory, slug=self.kwargs.get('cat_slug'))
 
-        return context
+#         return context
 
 
 class TagPostListView(ListView):

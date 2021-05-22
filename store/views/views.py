@@ -3,12 +3,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic import View, ListView
+from django.contrib.auth.decorators import permission_required
+
 from taggit.models import Tag
 
 from ..models import Order, ItemDetailPage, ItemCategory, ItemParentCategory, OrderInfo
 from ..forms import CheckoutForm, BillingAddressForm, ItemOptionForm
 from core.boost import DynamicRedirectMixin
 from users.models import ShippingAddress, BillingAddress
+from core.views import paginate
 
 
 class CategoryItemListView(ListView):
@@ -226,28 +229,41 @@ class OrderSummaryView(LoginRequiredMixin, View):
             return render(self.request, 'checkout/order-summary.html')
 
 
-class OrderListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
+@permission_required('is_staff')
+def order_list(request):
+  
+  all_orders = Order.objects.filter(ordered=True).order_by('-ordered_date')
+  if OrderInfo.objects.first():
+    pagination = OrderInfo.objects.first().order_list_paginate_by
+  else:
+    pagination = 5
 
-    model = Order
-    template_name = 'store/order-list.html'
-    context_object_name = 'orders'
-    if OrderInfo.objects.exists():
-      paginate_by = OrderInfo.objects.first().order_list_paginate_by
-    else:
-      paginate_by = 5
+  context = {
+    'orders': paginate(request, all_orders, pagination),
+    'list_for_staff': 1,
+  }
+  return render(request, 'store/order-list.html', context)
 
-    def get_queryset(self):
-        return Order.objects.filter(ordered=True).order_by('-ordered_date')
 
-    # ユーザーがスタッフの時にのみ許可
-    def test_func(self):
-        if self.request.user.is_staff:
-            return True
-        return False
+# class OrderListView(LoginRequiredMixin, UserPassesTestMixin, ListView):
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["list_for_staff"] = 1
-        return context
+#     model = Order
+#     template_name = 'store/order-list.html'
+#     context_object_name = 'orders'
+#     paginate_by = 5
+
+#     def get_queryset(self):
+#         return Order.objects.filter(ordered=True).order_by('-ordered_date')
+
+#     # ユーザーがスタッフの時にのみ許可
+#     def test_func(self):
+#         if self.request.user.is_staff:
+#             return True
+#         return False
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context["list_for_staff"] = 1
+#         return context
 
 

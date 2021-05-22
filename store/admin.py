@@ -54,19 +54,31 @@ class ItemListAdmin(ModelAdmin):
 class ItemAdminGroup(ModelAdminGroup):
     menu_label = "商品管理"
     menu_icon = "folder-open-1"
-    menu_order = 290
+    menu_order = 280
     items = (ItemDetailAdmin, ItemCategoryAdmin, ItemParentCategoryAdmin, ItemListAdmin)
+
+class OrderAdmin(ModelAdmin):
+
+  model = Order
+  menu_label = "受注管理"
+  menu_icon = "folder"
+  menu_order = 290
+  add_to_settings_menu = False
+  exclude_from_explorer = False
+  list_display = ("user", "start_date", "ordered_date")
+  search_fields = ("user", "start_date", "ordered_date")
 
 class OrderInfoAdmin(ModelAdmin):
 
   model = OrderInfo
   menu_label = "注文関連設定"
   menu_icon = "folder"
-  menu_order = 500
+  menu_order = 300
   add_to_settings_menu = False
   exclude_from_explorer = False
   list_display = ("free_shippment_line", "shipping_fee", "order_history_paginate_by", "order_list_paginate_by")
   # search_fields = ()
 
 modeladmin_register(ItemAdminGroup)
+modeladmin_register(OrderAdmin)
 modeladmin_register(OrderInfoAdmin)

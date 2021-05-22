@@ -9,7 +9,7 @@ urlpatterns = [
     path('edit-profile/', edit_profile, name='edit-profile'),
 
     path('fav-items/', FavItemsListView.as_view(), name='fav-items'),
-    path('order-history', OrderHistoryView.as_view(),
+    path('order-history', order_history,
          name='order-history'),
 
     path('shipping-address/create/',

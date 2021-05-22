@@ -35,11 +35,11 @@ class SubscriberCreateView(CreateView):
           # )
           send_mail(
             'ご登録ありがとうございます',
-            f'{self.request.user.username}様 ニュースレターの登録が完了致しました。',
+            f'{full_name}様 ニュースレターの登録が完了致しました。',
             'uncleko496@gmail.com',
             [email, 'uncleko496@gmail.com'],
             fail_silently=False,
           )
-          messages.success(self.request, "ご登録ありがとうございます。")
+          messages.success(self.request, "ニュースレターへのご登録ありがとうございます。")
           return redirect(self.request.META['HTTP_REFERER'])
 

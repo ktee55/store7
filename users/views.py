@@ -17,6 +17,7 @@ from .models import ShippingAddress, BillingAddress
 from store.models import Order, ItemDetailPage, ItemCategory, OrderInfo
 from .forms import ShippingAddressForm, PrimaryShippingAddressForm, BillingAddressForm, PrimaryBillingAddressForm, UserUpdateForm, ProfileUpdateForm
 from store.forms import ItemOptionForm
+from core.views import paginate
 
 
 class ProfileView(LoginRequiredMixin, DynamicRedirectMixin, View):
@@ -76,31 +77,47 @@ class FavItemsListView(LoginRequiredMixin, ListView):
     #     return False
 
 
-class OrderHistoryView(LoginRequiredMixin, ListView):
+# @permission_required('is_staff')
+def order_history(request):
+  
+  all_orders = Order.objects.filter(user=request.user, ordered=True).order_by('-ordered_date')
+  if OrderInfo.objects.first():
+    pagination = OrderInfo.objects.first().order_history_paginate_by
+  else:
+    pagination = 5
 
-    model = Order
-    template_name = 'store/order-list.html'
-    context_object_name = 'orders'
-    if OrderInfo.objects.exists():
-      paginate_by = OrderInfo.objects.first().order_history_paginate_by
-    else:
-      paginate_by = 5
+  context = {
+    'orders': paginate(request, all_orders, pagination),
+    'history': 1,
+  }
+  return render(request, 'store/order-list.html', context)
 
-    def get_queryset(self):
-        # user = get_object_or_404(User, pk=self.kwargs.get('pk'))
-        return Order.objects.filter(user=self.request.user, ordered=True).order_by('-ordered_date')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["history"] = 1
+# class OrderHistoryView(LoginRequiredMixin, ListView):
 
-        return context
+#     model = Order
+#     template_name = 'store/order-list.html'
+#     context_object_name = 'orders'
+#     if OrderInfo.objects.exists():
+#       paginate_by = OrderInfo.objects.first().order_history_paginate_by
+#     else:
+#       paginate_by = 5
 
-    # def test_func(self):
-    #     user = get_object_or_404(User, pk=self.kwargs.get('pk'))
-    #     if self.request.user == user:
-    #         return True
-    #     return False
+#     def get_queryset(self):
+#         # user = get_object_or_404(User, pk=self.kwargs.get('pk'))
+#         return Order.objects.filter(user=self.request.user, ordered=True).order_by('-ordered_date')
+
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context["history"] = 1
+
+#         return context
+
+#     # def test_func(self):
+#     #     user = get_object_or_404(User, pk=self.kwargs.get('pk'))
+#     #     if self.request.user == user:
+#     #         return True
+#     #     return False
 
 
 class ShippingAddressCreateView(LoginRequiredMixin, DynamicRedirectMixin, CreateView):

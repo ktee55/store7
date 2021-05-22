@@ -181,14 +181,17 @@ class BlogListingPage(RoutablePageMixin, Page):
         """Adding custom stuff to our context."""
         context = super().get_context(request, *args, **kwargs)
         all_posts = BlogDetailPage.objects.live().public().order_by('-first_published_at')
-        # pagination = BlogPagination.objects.first()
-        pagination = 1
+        # pagination = 1
+        if BlogPagination.objects.first():
+          pagination = BlogPagination.objects.first().listing_page
+        else:
+          pagination = 5
 
         # if request.GET.get('tag', None):
         #   tag = request.GET.get('tag')
         #   all_posts = all_posts.filter(tags__slug__in=[tag])
 
-        # context["posts"] = paginate(request, all_posts, pagination.listing_page)
+        # context["posts"] = paginate(request, all_posts, pagination)
         context["posts"] = paginate(request, all_posts, pagination)
         # context["posts"] = all_posts
 
@@ -308,21 +311,15 @@ class BlogLink(Orderable):
       return self.url
 
 
-# class BlogPagination(models.Model):
+class BlogPagination(models.Model):
 
-#     listing_page = models.IntegerField(default=10)
-#     category_page = models.IntegerField(default=10)
-#     tag_page = models.IntegerField(default=10)
+    listing_page = models.IntegerField(default=5)
+    category_page = models.IntegerField(default=5)
+    tag_page = models.IntegerField(default=5)
 
-#     panels = [
-#         FieldPanel("listing_page"),
-#         FieldPanel("category_page"),
-#         FieldPanel("tag_page"),
-#     ]
-
-#     class Meta:
-#         verbose_name = "Blog Pagination"
-#         verbose_name_plural = "Blog Paginations"
+    class Meta:
+        verbose_name = "Blog Pagination"
+        verbose_name_plural = "Blog Paginations"
 
 
 class BlogComment(models.Model):

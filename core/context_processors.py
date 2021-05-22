@@ -3,7 +3,7 @@ from django.db.models import Count
 
 from store.models import ItemCategory, ItemParentCategory, TaggedItem
 from blog.models import BlogDetailPage, BlogCategory, BlogParentCategory, TaggedPost
-# from taggit.models import Tag
+from taggit.models import Tag
 # from django.db.models import Count
 
 
@@ -22,6 +22,7 @@ def global_val(request):
         # 'blog_categories': BlogCategory.objects.all(),
         'blog_categories': BlogCategory.objects.annotate(num_posts=Count('posts')).order_by('-num_posts'),
         # 'post_tags': Tag.objects.annotate(num_posts=Count('posts')).order_by('-num_posts'),
+        # 'post_tags': Tag.objects.all(),
         "tagged_posts": TaggedPost.objects.all(),
 
         'archives': archives
