@@ -1,0 +1,11 @@
+{% load static crispy_forms_tags %}
+    <div class="container mt-5">
+      <form method="POST" action="{% url 'subscribe' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset class="form-group">
+          <legend class="border-bottm mb-4">Newsletterを購読する</legend>
+          {{ settings.site_settings.SubscriptionForm.form | crispy }}
+        </fieldset>
+        <button class="btn btn-outline-info mt-3" type="submit">申し込む</button>
+      </form>
+    </div>

@@ -28,15 +28,12 @@
 
           {% if user.shipping_addresses.count %}
           <div id="div_id_list_stored_address" class="mb-4 form-group">
-            <!-- <label for="id_list_stored_address" class="label">ひとつ選択下さい</label> -->
             <div id="id_list_stored_address" class="d-block">
-              <!-- {% for field in form.fields.list_stored_address.choices %}
-                {{ field }}
-                {% endfor %} -->
               {% for value, name in form.fields.list_stored_address.choices %}
               <div class="custom-control custom-radio">
-                <input id="list_stored_address_{{forloop.counter}}" name="list_stored_address" value="{{ value }}" {% if
-                  value==primary_id %} checked="checked" {% endif %} type="radio" class="custom-control-input">
+                <input id="list_stored_address_{{forloop.counter}}" name="list_stored_address" value="{{ value }}" type="radio" class="custom-control-input" 
+                {% if value == primary_id %} checked="checked" {% endif %} 
+                >
                 <label class="custom-control-label address" for="list_stored_address_{{ forloop.counter }}">
                   {{ name }}
                 </label>
