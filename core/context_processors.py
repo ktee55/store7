@@ -9,7 +9,7 @@ from taggit.models import Tag
 
 def global_val(request):
     archives = BlogDetailPage.objects.filter(draft=False).values(
-        'first_published_at__year', 'first_published_at__month').annotate(Count('id')).order_by()
+        'first_published_at__year', 'first_published_at__month').annotate(Count('id')).order_by('-first_published_at__month')
 
     return {
         "item_categories": ItemCategory.objects.filter(parent__isnull=True),
@@ -17,7 +17,7 @@ def global_val(request):
         # "tags": Tag.objects.all()
         "tagged_items": TaggedItem.objects.all(),
 
-        'latest_posts': BlogDetailPage.objects.live().public(),
+        'latest_posts': BlogDetailPage.objects.live().public().order_by('-first_published_at'),
         'draft_posts': BlogDetailPage.objects.not_live(),
         # 'blog_categories': BlogCategory.objects.all(),
         'blog_categories': BlogCategory.objects.annotate(num_posts=Count('posts')).order_by('-num_posts'),

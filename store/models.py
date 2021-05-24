@@ -326,9 +326,9 @@ class Order(models.Model):
                            on_delete=models.CASCADE, related_name="orders")
   items = models.ManyToManyField(OrderItem)
   start_date = models.DateTimeField(auto_now_add=True)
-  ordered_date = models.DateTimeField()
+  ordered_date = models.DateTimeField(verbose_name="注文確定日")
   ordered = models.BooleanField(default=False)
-  dispatched = models.BooleanField(default=False)
+  dispatched = models.BooleanField(default=False, verbose_name="発送済み")
   shipping_address = models.ForeignKey(
       'users.ShippingAddress', on_delete=models.SET_NULL, blank=True, null=True)
   billing_address = models.ForeignKey(
@@ -339,6 +339,13 @@ class Order(models.Model):
       choices=DELIVERY_TIME, max_length=2, blank=True, null=True)
   payment = models.ForeignKey(
       'Payment', on_delete=models.SET_NULL, blank=True, null=True)
+
+  # panels = [
+  #     FieldPanel("dispatched"),
+  #     FieldPanel("user"),
+  #     FieldPanel("items"),
+  #     FieldPanel("ordered_date"),
+  # ]
 
   class Meta:
     verbose_name_plural = 'カート内全商品/注文済注文'

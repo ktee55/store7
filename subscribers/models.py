@@ -11,5 +11,5 @@ class Subscriber(models.Model):
     return self.full_name
 
   class Meta: # noqa
-    verbose_name = "Subscriber"
-    verbose_name_plural = "Subscribers"
+    verbose_name = "ニュースレター購読者"
+    verbose_name_plural = "ニュースレター購読者"

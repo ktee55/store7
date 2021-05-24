@@ -8,7 +8,7 @@ class SubscriberAdmin(ModelAdmin):
   """Subscriber admin."""
 
   model = Subscriber
-  menu_label = "Subscriber"
+  menu_label = "ニュースレター購読者"
   menu_icon = "mail"
   menu_order = 550
   add_to_settings_menu = False

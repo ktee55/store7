@@ -15,8 +15,9 @@ class ItemDetailAdmin(ModelAdmin):
   model = ItemDetailPage
   menu_label = "商品一覧/編集/追加"
   menu_icon = "folder"
-  list_display = ("title", "price", "discount_price", "get_item_categories", "get_item_tags", "stock", "pickup", "featured", "live")
-  search_fields = ("title", "get_item_categories", "get_item_tags")
+  list_display = ("title", "price", "discount_price", "get_item_categories", "get_item_tags", "stock", "pickup", "featured", "live", "first_published_at")
+  list_filter = ('categories', 'featured', 'pickup', 'tags')
+  search_fields = ["title"]
 
   def get_item_categories(self, obj):
     return ",\n".join([category.name for category in obj.categories.all()])
@@ -57,22 +58,22 @@ class ItemAdminGroup(ModelAdminGroup):
     menu_order = 280
     items = (ItemDetailAdmin, ItemCategoryAdmin, ItemParentCategoryAdmin, ItemListAdmin)
 
-class OrderAdmin(ModelAdmin):
+# class OrderAdmin(ModelAdmin):
 
-  model = Order
-  menu_label = "受注管理"
-  menu_icon = "folder"
-  menu_order = 290
-  add_to_settings_menu = False
-  exclude_from_explorer = False
-  list_display = ("user", "start_date", "ordered_date")
-  search_fields = ("user", "start_date", "ordered_date")
+#   model = Order
+#   menu_label = "受注管理"
+#   menu_icon = "folder"
+#   menu_order = 290
+#   add_to_settings_menu = False
+#   exclude_from_explorer = False
+#   list_display = ("user", "dispatched", "ordered_date")
+#   search_fields = ("user", "dispatched", "ordered_date")
 
 class OrderInfoAdmin(ModelAdmin):
 
   model = OrderInfo
   menu_label = "注文関連設定"
-  menu_icon = "folder"
+  menu_icon = "cog"
   menu_order = 300
   add_to_settings_menu = False
   exclude_from_explorer = False
@@ -80,5 +81,5 @@ class OrderInfoAdmin(ModelAdmin):
   # search_fields = ()
 
 modeladmin_register(ItemAdminGroup)
-modeladmin_register(OrderAdmin)
+# modeladmin_register(OrderAdmin)
 modeladmin_register(OrderInfoAdmin)

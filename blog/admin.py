@@ -48,7 +48,8 @@ class BlogPostAdmin(ModelAdmin):
   menu_label = "投稿"
   menu_icon = "folder"
   list_display = ("title", "owner", "get_categories", "get_tags", "first_published_at")
-  search_fields = ("title", "content")
+  list_filter = ('categories', 'tags')
+  search_fields = ["title"]
 
   def get_categories(self, obj):
     return ",\n".join([category.name for category in obj.categories.all()])
@@ -91,7 +92,7 @@ class BlogPaginationAdmin(ModelAdmin):
 
   model = BlogPagination
   menu_label = "Blog Pagination"
-  menu_icon = "placeholder"
+  menu_icon = "cog"
 
 class BlogAdminGroup(ModelAdminGroup):
     menu_label = "Blog"
