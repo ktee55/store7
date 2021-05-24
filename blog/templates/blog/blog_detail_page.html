@@ -38,9 +38,13 @@
         <div class="article-content">
           {% for content in self.main_contents.all %}
           {% if content.image %}
-          {% image content.image max-600x600 as img %}
+          {% image content.image width-700 as img %}
           <img src="{{ img.url }}" alt="{% if content.img_alt %}{{ content.img_alt }}{% else %}{{ img.alt }}{% endif %}" 
             class="featured_image expand-modal">
+          <div class="modal">
+            {% image content.image max-1280x1280 as img %}
+            <div class="bcimage" style="background-image: url('{{ img.url }}');"></div>
+          </div>
           {% endif %}
           {{ content.text | richtext }}
           {% endfor %}

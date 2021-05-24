@@ -42,7 +42,7 @@
       </h2>
 
       {% if post.main_contents.first.image %}
-      {% image post.main_contents.first.image max-600x600 as img %}
+      {% image post.main_contents.first.image width-700 as img %}
       <img src="{{ img.url }}" alt="" class="featured_image expand-modal">
       <div class="modal">
         {% image post.main_contents.first.image max-1280x1280 as img %}
