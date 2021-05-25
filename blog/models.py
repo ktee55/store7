@@ -313,13 +313,14 @@ class BlogLink(Orderable):
 
 class BlogPagination(models.Model):
 
-    listing_page = models.IntegerField(default=5)
-    category_page = models.IntegerField(default=5)
-    tag_page = models.IntegerField(default=5)
+    listing_page = models.IntegerField(default=5, verbose_name="ブログ投稿一覧")
+    category_page = models.IntegerField(default=5, verbose_name="カテゴリーページ")
+    tag_page = models.IntegerField(default=5, verbose_name="タグページ")
+    whatsnew_home = models.IntegerField(default=3, verbose_name="What's New")
 
     class Meta:
-        verbose_name = "Blog Pagination"
-        verbose_name_plural = "Blog Paginations"
+        verbose_name = "ブログページネーション"
+        verbose_name_plural = "ブログページネーション"
 
 
 class BlogComment(models.Model):

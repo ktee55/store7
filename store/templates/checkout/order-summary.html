@@ -58,12 +58,12 @@
     </div>
 
     <div class="clearfix flex-buttons">
+      <a class='btn btn-second' href="{% url 'store:checkout' %}">注文内容を変更する</a>
       {% if order.get_total and order.shipping_address and order.payment_option %}
       <a class='btn btn-main' href="{% url 'store:confirm-order' %}">注文を確定する </a>
       {% else %}
       <a class='btn btn-main' href="/">買い物を続ける</a>
       {% endif %}
-      <a class='btn btn-second' href="{% url 'store:checkout' %}">注文内容を変更する</a>
     </div>
 
   </div> <!-- container -->

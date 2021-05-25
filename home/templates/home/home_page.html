@@ -72,34 +72,6 @@
   {% endif %}
 
 
-  <div class="whatsnew">
-
-    <section>
-
-      <header>
-        <h1>What's New</h1>
-      </header>
-      <ul>
-        {% for post in posts %}
-        <li>
-          <div class="entry-date-wrap">
-            <div class="date-item">{{ post.first_published_at |date:"j" }}</div>
-            <div class="montn-item">{{ post.first_published_at |date:"M" }}</div>
-          </div>
-          <div>
-            <h2><a class="article-title" href="{{ post.url }}">{{ post.title }}</a></h2>
-            <p class="article-content"> {{ post.main_contents.first.text | richtext | slice:":100" }}.....</p>
-            <a href="{{ post.url }}" class="continue">Read More</a>
-
-          </div>
-        </li>
-        {% endfor %}
-      </ul>
-
-    </section>
-
-  </div> <!-- latest-posts -->
-
   <div class="items">
 
     <section>
@@ -170,8 +142,35 @@
   </nav>
   {% endif %} -->
 
-</div>
-<!-- #home -->
+  <div class="whatsnew mt-5">
+
+    <section>
+
+      <header>
+        <h1>What's New</h1>
+      </header>
+      <ul>
+        {% for post in posts %}
+        <li>
+          <div class="entry-date-wrap">
+            <div class="date-item">{{ post.first_published_at |date:"j" }}</div>
+            <div class="montn-item">{{ post.first_published_at |date:"M" }}</div>
+          </div>
+          <div>
+            <h2><a class="article-title" href="{{ post.url }}">{{ post.title }}</a></h2>
+            <p class="article-content"> {{ post.main_contents.first.text | richtext | slice:":100" }}.....</p>
+            <a href="{{ post.url }}" class="continue">Read More</a>
+
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+
+    </section>
+
+  </div> <!-- whatsnew -->
+
+</div> <!-- #home -->
 
 {% include "parts/subscribe.html" %}
 

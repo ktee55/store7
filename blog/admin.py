@@ -91,11 +91,11 @@ class BlogListAdmin(ModelAdmin):
 class BlogPaginationAdmin(ModelAdmin):
 
   model = BlogPagination
-  menu_label = "Blog Pagination"
+  menu_label = "ページネーション"
   menu_icon = "cog"
 
 class BlogAdminGroup(ModelAdminGroup):
-    menu_label = "Blog"
+    menu_label = "ブログ"
     menu_icon = "folder-open-1"
     menu_order = 300
     items = (BlogPostAdmin, BlogParentCategoryAdmin, BlogCategoryAdmin, BlogAuthorAdmin, BlogListAdmin, BlogPaginationAdmin)
