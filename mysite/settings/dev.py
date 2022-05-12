@@ -8,7 +8,7 @@ DEBUG = True
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: define the correct hosts in production!
-ALLOWED_HOSTS = ['store7.shop', 'store7.herokuapp.com', 'www.store7.shop', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['store7.club', 'store7.shop', 'store7.herokuapp.com', 'www.store7.club', 'www.store7.shop', '127.0.0.1', 'localhost']
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
