@@ -6,6 +6,9 @@
 {% block title %}Search{% endblock %}
 
 {% block content %}
+
+  <div id="search" class="container mt-5 mb-5">
+
     <h1>Search</h1>
 
     <form action="{% url 'search' %}" method="get">
@@ -14,9 +17,9 @@
     </form>
 
     {% if search_results %}
-        <ul>
+        <ul class="mt-5 mb-5">
             {% for result in search_results %}
-                <li>
+                <li class="mt-3 mb-3">
                     <h4><a href="{% pageurl result %}">{{ result }}</a></h4>
                     {% if result.search_description %}
                         {{ result.search_description }}
@@ -35,4 +38,7 @@
     {% elif search_query %}
         No results found
     {% endif %}
+
+  </div>
+
 {% endblock %}

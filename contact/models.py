@@ -1,7 +1,5 @@
 from django.db import models
 
-from django.db import models
-
 from modelcluster.fields import ParentalKey
 from wagtail.snippets.models import register_snippet
 from wagtail.admin.edit_handlers import (
@@ -18,6 +16,14 @@ from wagtail.contrib.forms.models import (
 
 from wagtailcaptcha.models import WagtailCaptchaEmailForm
 
+from datetime import date
+# ... additional wagtail imports
+from wagtail.admin.mail import send_mail
+from wagtail.contrib.forms.models import AbstractEmailForm
+
+import json
+from django.core.serializers.json import DjangoJSONEncoder
+from django.forms.fields import EmailField
 
 class FormField(AbstractFormField):
   page = ParentalKey(
@@ -50,5 +56,22 @@ class ContactPage(WagtailCaptchaEmailForm):
       FieldPanel("subject"),
     ], heading="Email Settings"),
   ]
+
+  def send_mail(self, form):
+    # `self` is the FormPage, `form` is the form's POST data on submit
+
+    # Email addresses are parsed from the FormPage's addresses field
+    to_addresses = [x.strip() for x in self.to_address.split(',')]
+    for field in form:
+      value = field.value()
+      if type(field.field) == EmailField:  # if we find an email field
+          if str(value) not in [None, '']:  # if the value is not empty
+              to_addresses.append(str(value))  # add to the email to addresses
+
+    # Subject can be adjusted (adding submitted date), be sure to include the form's defined subject field
+    submitted_date_str = date.today().strftime('%x')
+    subject = f"{self.subject} - {submitted_date_str}"
+
+    send_mail(subject, self.render_email(form), to_addresses, self.from_address,)
 
 register_snippet(ContactPage)

@@ -202,7 +202,7 @@ class BillingAddressView(LoginRequiredMixin, View):
                 self.request, "ラジオボックスをひとつご選択ください。")
             return redirect('store:billing-address')
 
-        except objectdoesnotexist:
+        except ObjectDoesNotExist:
             return redirect("store:shopping-cart")
 
 
