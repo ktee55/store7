@@ -1,5 +1,5 @@
 {% load cart_template_tags menus_tags menu_tags %}
-{% get_menu "main" as nav %}
+{% get_menu "main" as main_menu %}
 
 <nav id="main-menu" class="navbar navbar-expand-lg navbar-light scrolling-navbar">
   <div class="container">
@@ -33,7 +33,7 @@
         <li class="nav-item">
           <a class="nav-link waves-effect" href="/blog/">ブログ</a>
         </li> -->
-        {% for menu_item in nav.menu_items.all %}
+        {% for menu_item in main_menu.menu_items.all %}
         <li class="nav-item">
           <a href="{{ menu_item.link }}" class="nav-link" {% if menu_item.open_in_new_tab %}target="_blank" {% endif %}>{{ menu_item.title }}</a>
         </li>

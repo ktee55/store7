@@ -1,10 +1,13 @@
 #### Settings.pyに'wagtail.contrib.settings'と'wagtail.contrib.settings.context_processors.settings'を追加 ###
 from django.db.models import Count
+from search.forms import SearchForm
 
 from store.models import ItemCategory, ItemParentCategory, TaggedItem
 from blog.models import BlogDetailPage, BlogCategory, BlogParentCategory, TaggedPost
 from taggit.models import Tag
 # from django.db.models import Count
+
+# from search.forms import SearchForm
 
 
 def global_val(request):
@@ -17,13 +20,14 @@ def global_val(request):
         # "tags": Tag.objects.all()
         "tagged_items": TaggedItem.objects.all(),
 
-        'latest_posts': BlogDetailPage.objects.live().public().order_by('-first_published_at'),
-        'draft_posts': BlogDetailPage.objects.not_live(),
+        "latest_posts": BlogDetailPage.objects.live().public().order_by('-first_published_at'),
+        "draft_posts": BlogDetailPage.objects.not_live(),
         # 'blog_categories': BlogCategory.objects.all(),
-        'blog_categories': BlogCategory.objects.annotate(num_posts=Count('posts')).order_by('-num_posts'),
+        "blog_categories": BlogCategory.objects.annotate(num_posts=Count('posts')).order_by('-num_posts'),
         # 'post_tags': Tag.objects.annotate(num_posts=Count('posts')).order_by('-num_posts'),
         # 'post_tags': Tag.objects.all(),
         "tagged_posts": TaggedPost.objects.all(),
+        # "search_form": SearchForm,
 
-        'archives': archives
+        "archives": archives
     }

@@ -141,8 +141,18 @@ Tag: {{ tag.name }}
 
 
     <h5>Tags:</h5>
-    <small>
-    </small>
+    {% comment %} <small>
+      {% for tag in item_tags %}
+      <a href="">
+        {{ tag.name }}
+      </a>
+      {% endfor %} 
+      {% for item in tagged_items %}
+      <a href="{% url 'store:tag-view' item.tag.slug %}">
+        {{ item.tag }}
+      </a>
+      {% endfor %}
+    </small> {% endcomment %}
 
 </div> <!-- #item-list -->
 

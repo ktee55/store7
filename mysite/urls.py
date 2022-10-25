@@ -17,6 +17,7 @@ urlpatterns = [
     path('documents/', include(wagtaildocs_urls)),
 
     path('search/', search_views.search, name='search'),
+    # path('search-results/', search_views.search_results, name='search_results'),
     path('accounts/', include('allauth.urls')),
     path('subscribe/', SubscriberCreateView.as_view(), name='subscribe'),
 

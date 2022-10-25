@@ -1,8 +1,12 @@
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.template.response import TemplateResponse
+from django.shortcuts import redirect, render
 
 from wagtail.core.models import Page
 from wagtail.search.models import Query
+
+# from .forms import SearchForm
+from store.models import ItemDetailPage
 
 
 def search(request):
@@ -11,7 +15,7 @@ def search(request):
 
     # Search
     if search_query:
-        search_results = Page.objects.live().search(search_query)
+        search_results = ItemDetailPage.objects.live().search(search_query)
         query = Query.get(search_query)
 
         # Record hit
@@ -32,3 +36,12 @@ def search(request):
         'search_query': search_query,
         'search_results': search_results,
     })
+
+# def search_results(request):
+#   # if form.is_valid():
+#   #     qurey = form.cleaned_data.get('color_option')
+#   #     size = form.cleaned_data.get('size_option')
+
+#   # return redirect(request.META['HTTP_REFERER'])
+#   # return render(request, 'store/shopping-cart.html')
+#   return redirect('/search/?query=test')

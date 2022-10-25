@@ -17,12 +17,10 @@ from wagtail.contrib.forms.models import (
 from wagtailcaptcha.models import WagtailCaptchaEmailForm
 
 from datetime import date
-# ... additional wagtail imports
 from wagtail.admin.mail import send_mail
-from wagtail.contrib.forms.models import AbstractEmailForm
 
-import json
-from django.core.serializers.json import DjangoJSONEncoder
+# import json
+# from django.core.serializers.json import DjangoJSONEncoder
 from django.forms.fields import EmailField
 
 class FormField(AbstractFormField):
@@ -57,6 +55,7 @@ class ContactPage(WagtailCaptchaEmailForm):
     ], heading="Email Settings"),
   ]
 
+  # Custom send_mail
   def send_mail(self, form):
     # `self` is the FormPage, `form` is the form's POST data on submit
 

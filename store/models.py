@@ -16,6 +16,7 @@ from wagtail.images.edit_handlers import ImageChooserPanel
 # from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 # from wagtail.snippets.models import register_snippet
+from wagtail.search import index
 
 from .forms import ItemOptionForm
 from users.models import ShippingAddress, BillingAddress
@@ -161,6 +162,11 @@ class ItemDetailPage(Page):
       ], heading="リスト画像"),
       InlinePanel("size_option", max_num=10, min_num=0, label="サイズオプション"),
       InlinePanel("color_option", max_num=10, min_num=0, label="カラーオプション"),
+  ]
+
+  search_fields = Page.search_fields + [ 
+        index.SearchField('description'),
+        # index.FilterField('date'),
   ]
 
   class Meta:
