@@ -7,7 +7,7 @@ from .models import FlexPage
 class FlexPageAdmin(ModelAdmin):
 
   model = FlexPage
-  menu_label = "Flex Pages"
+  menu_label = "その他ページ"
   menu_icon = "folder"
   menu_order = 310
   add_to_settings_menu = False
