@@ -23,7 +23,7 @@ nav h1 {
   // font-size: 2rem;
   // margin-bottom: 0;
   font: 0/0 a;
-  background: url(https://store-for-nobody.s3-ap-northeast-1.amazonaws.com/logos/a-store-logo-black.png);
+  background: url(https://store7.s3.amazonaws.com/store7-logo-black.png);
   // background: url(/images/logo.png);
   width: 120px;
   height: 30px;
@@ -34,6 +34,9 @@ nav h1 {
 nav#main-menu {
   font-family: $jp-font;
   font-size: 0.8rem;
+  .main-menu-left {
+    font-size: 0.9rem;
+  }
 }
 
 h2 {

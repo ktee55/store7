@@ -454,7 +454,7 @@
   @media screen and (min-width: 768px) {
     & > .container {
       // border: 1px solid #666;
-      padding: 0 20rem;
+      padding: 0 16rem;
     }
   }
   // ul { 
@@ -473,6 +473,7 @@
 
 .jumbotron {
 	padding: 4rem;
+  background-color: #5f788a;
 }
 
 .sold {

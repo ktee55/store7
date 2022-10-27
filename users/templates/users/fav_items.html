@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load humanize %}
+{% load humanize wagtailimages_tags %}
 {% block head_title %}お気に入り{% endblock %}
 {% block content %}
 
@@ -14,9 +14,10 @@
     {% for item in fav_items %}
 
     <div>
-      {% if item.image %}
+      {% if item.list_image %}
+      {% image item.list_image fill-100x100 as img %} 
       <a href="{{ item.url }}">
-        <img src="" class="thumb">
+        <img src="{{ img.url }}" alt="{% if item.list_img_alt %}{{ item.list_img_alt }}{% else %}{{ img.alt }}{% endif %}">
       </a>
       {% endif %}
     </div>

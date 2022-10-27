@@ -8,6 +8,7 @@ from .models import ItemParentCategory, ItemCategory, ItemDetailPage, ItemListin
 
 from django.contrib import admin
 admin.site.register(Order)
+admin.site.register(ItemDetailPage)
 
 
 class ItemDetailAdmin(ModelAdmin):
