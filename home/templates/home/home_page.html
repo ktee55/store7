@@ -102,6 +102,15 @@
               {% endif %}
             </div>
           </div>
+
+          {% if item.stock == 0 %}
+          <div class="sold">
+            <a href="{{ item.url }}">
+              <p>Sold</p>
+            </a>
+          </div>
+          {% endif %}
+
         </li>
         {% endfor %}
       </ul>

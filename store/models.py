@@ -423,7 +423,7 @@ class ItemListingPage(RoutablePageMixin, Page):
       context = super().get_context(request, *args, **kwargs)
       all_items = ItemDetailPage.objects.live().public().order_by('-first_published_at')
       # pagination = ItemPagination.objects.first()
-      pagination = 1
+      pagination = 4
 
       context["items"] = paginate(request, all_items, pagination)
 

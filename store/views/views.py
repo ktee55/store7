@@ -18,7 +18,7 @@ class CategoryItemListView(ListView):
     model = ItemDetailPage
     template_name = 'store/item_listing_page.html'
     context_object_name = 'items'
-    paginate_by = 1
+    paginate_by = 4
 
     def get_queryset(self):
       # try:
@@ -42,7 +42,7 @@ class TagItemListView(ListView):
     model = ItemDetailPage
     template_name = 'store/item_listing_page.html'
     context_object_name = 'items'
-    paginate_by = 1
+    paginate_by = 4
 
     def get_queryset(self):
       # try:

@@ -133,6 +133,17 @@ div.category-item-list {
   grid-template-columns: repeat(4, 1fr);
   div {
     padding: 10px;
+    position: relative;
+    .sold {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      overflow: hidden;
+      justify-content: left;
+      align-items: flex-start;
+    }
   }
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
