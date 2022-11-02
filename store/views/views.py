@@ -7,58 +7,86 @@ from django.contrib.auth.decorators import permission_required
 
 from taggit.models import Tag
 
-from ..models import Order, ItemDetailPage, ItemCategory, ItemParentCategory, OrderInfo
+from ..models import Order, ItemDetailPage, ItemCategory, ItemParentCategory, OrderInfo, ItemListingPagination
 from ..forms import CheckoutForm, BillingAddressForm, ItemOptionForm
 from core.boost import DynamicRedirectMixin
 from users.models import ShippingAddress, BillingAddress
 from core.views import paginate
 
 
-class CategoryItemListView(ListView):
-    model = ItemDetailPage
-    template_name = 'store/item_listing_page.html'
-    context_object_name = 'items'
-    paginate_by = 4
+def category_items(request, cat_slug):
+  category = get_object_or_404(ItemCategory, slug=cat_slug)
+  all_items = category.items.live().public().order_by('-first_published_at')
+  if ItemListingPagination.objects.first():
+    pagination = ItemListingPagination.objects.first().category_page
+  else:
+    pagination = 4
 
-    def get_queryset(self):
-      # try:
-      #     category = ItemCategory.objects.get(slug=self.kwargs.get('cat_slug'))
-      # except Exception:
-      #     messages.error(self.request, "指定されたカテゴリーは存在しませんでした。")
-      #     return redirect('/blog/')
-      category = get_object_or_404(ItemCategory, slug=self.kwargs.get('cat_slug'))
+  context = {
+    'category': category,
+    'items': paginate(request, all_items, pagination),
+  }
+  return render(request, 'store/item_listing_page.html', context)
+
+# class CategoryItemListView(ListView):
+#     model = ItemDetailPage
+#     template_name = 'store/item_listing_page.html'
+#     context_object_name = 'items'
+#     paginate_by = 4
+
+#     def get_queryset(self):
+#       # try:
+#       #     category = ItemCategory.objects.get(slug=self.kwargs.get('cat_slug'))
+#       # except Exception:
+#       #     messages.error(self.request, "指定されたカテゴリーは存在しませんでした。")
+#       #     return redirect('/blog/')
+#       category = get_object_or_404(ItemCategory, slug=self.kwargs.get('cat_slug'))
       
-      # return ItemDetailPage.objects.live().public().order_by('-first_published_at').filter(categories__in=[category])
-      return category.items.live().public().order_by('-first_published_at')
+#       # return ItemDetailPage.objects.live().public().order_by('-first_published_at').filter(categories__in=[category])
+#       return category.items.live().public().order_by('-first_published_at')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["category"] = get_object_or_404(ItemCategory, slug=self.kwargs.get('cat_slug'))
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context["category"] = get_object_or_404(ItemCategory, slug=self.kwargs.get('cat_slug'))
 
-        return context
+#         return context
 
 
-class TagItemListView(ListView):
-    model = ItemDetailPage
-    template_name = 'store/item_listing_page.html'
-    context_object_name = 'items'
-    paginate_by = 4
+def tag_items(request, tag_slug):
+  tag = get_object_or_404(Tag, slug=tag_slug)
+  all_items = ItemDetailPage.objects.live().public().order_by('-first_published_at').filter(tags__in=[tag])
+  if ItemListingPagination.objects.first():
+    pagination = ItemListingPagination.objects.first().tag_page
+  else:
+    pagination = 4
 
-    def get_queryset(self):
-      # try:
-      #     tag = Tag.objects.get(slug=self.kwargs.get('tag_slug'))
-      # except Exception:
-      #     messages.error(self.request, "指定されたタグは存在しませんでした。")
-      #     return redirect('/items/')
-      tag = get_object_or_404(Tag, slug=self.kwargs.get('tag_slug'))
+  context = {
+    'tag': tag,
+    'items': paginate(request, all_items, pagination),
+  }
+  return render(request, 'store/item_listing_page.html', context)
+
+# class TagItemListView(ListView):
+#     model = ItemDetailPage
+#     template_name = 'store/item_listing_page.html'
+#     context_object_name = 'items'
+#     paginate_by = 1
+
+#     def get_queryset(self):
+#       # try:
+#       #     tag = Tag.objects.get(slug=self.kwargs.get('tag_slug'))
+#       # except Exception:
+#       #     messages.error(self.request, "指定されたタグは存在しませんでした。")
+#       #     return redirect('/items/')
+#       tag = get_object_or_404(Tag, slug=self.kwargs.get('tag_slug'))
       
-      return ItemDetailPage.objects.live().public().order_by('-first_published_at').filter(tags__in=[tag])
+#       return ItemDetailPage.objects.live().public().order_by('-first_published_at').filter(tags__in=[tag])
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["tag"] = get_object_or_404(Tag, slug=self.kwargs.get('tag_slug'))
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#         context["tag"] = get_object_or_404(Tag, slug=self.kwargs.get('tag_slug'))
 
-        return context
+#         return context
 
 
 class CartView(LoginRequiredMixin, View):

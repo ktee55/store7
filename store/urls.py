@@ -28,6 +28,8 @@ urlpatterns = [
   path('order-list/', order_list, name='order-list'),
   path('order-dispatched/<int:pk>', order_dispatched, name='order-dispatched'),
 
-  path('items/category/<str:cat_slug>/', CategoryItemListView.as_view(), name='category-view'),
-  path('items/tag/<str:tag_slug>/', TagItemListView.as_view(), name='tag-view'),
+  # path('items/category/<str:cat_slug>/', CategoryItemListView.as_view(), name='category-view'),
+  path('items/category/<str:cat_slug>/', category_items, name='category-view'),
+  # path('items/tag/<str:tag_slug>/', TagItemListView.as_view(), name='tag-view'),
+  path('items/tag/<str:tag_slug>/', tag_items, name='tag-view'),
 ]

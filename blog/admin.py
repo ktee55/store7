@@ -93,6 +93,7 @@ class BlogPaginationAdmin(ModelAdmin):
   model = BlogPagination
   menu_label = "ページネーション"
   menu_icon = "cog"
+  list_display = ["listing_page", "category_page", "tag_page", "whatsnew_home"]
 
 class BlogAdminGroup(ModelAdminGroup):
     menu_label = "ブログ"

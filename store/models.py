@@ -423,7 +423,10 @@ class ItemListingPage(RoutablePageMixin, Page):
       context = super().get_context(request, *args, **kwargs)
       all_items = ItemDetailPage.objects.live().public().order_by('-first_published_at')
       # pagination = ItemPagination.objects.first()
-      pagination = 4
+      if ItemListingPagination.objects.first():
+        pagination = ItemListingPagination.objects.first().listing_page
+      else:
+        pagination = 4
 
       context["items"] = paginate(request, all_items, pagination)
 
@@ -504,3 +507,15 @@ class OrderInfo(models.Model):
     class Meta:
         verbose_name = "注文関連設定"
         verbose_name_plural = "注文関連設定"
+
+
+class ItemListingPagination(models.Model):
+
+    listing_page = models.IntegerField(default=4, verbose_name="商品一覧")
+    category_page = models.IntegerField(default=4, verbose_name="カテゴリーページ")
+    tag_page = models.IntegerField(default=4, verbose_name="タグページ")
+    # whatsnew_home = models.IntegerField(default=3, verbose_name="What's New")
+
+    class Meta:
+        verbose_name = "商品一覧ページネーション"
+        verbose_name_plural = "商品一覧ページネーション"

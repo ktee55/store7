@@ -4,7 +4,7 @@ from wagtail.contrib.modeladmin.options import (
   ModelAdminGroup,
   modeladmin_register,
 )
-from .models import ItemParentCategory, ItemCategory, ItemDetailPage, ItemListingPage, Order, OrderInfo
+from .models import ItemParentCategory, ItemCategory, ItemDetailPage, ItemListingPage, Order, OrderInfo, ItemListingPagination
 
 from django.contrib import admin
 admin.site.register(Order)
@@ -52,12 +52,19 @@ class ItemListAdmin(ModelAdmin):
   menu_icon = "placeholder"
   list_display = ['title']
 
+class ItemListingPaginationAdmin(ModelAdmin):
+
+  model = ItemListingPagination
+  menu_label = "ページネーション"
+  menu_icon = "cog"
+  list_display = ["listing_page", "category_page", "tag_page"]
+
 
 class ItemAdminGroup(ModelAdminGroup):
     menu_label = "商品管理"
     menu_icon = "folder-open-1"
     menu_order = 280
-    items = (ItemDetailAdmin, ItemCategoryAdmin, ItemParentCategoryAdmin, ItemListAdmin)
+    items = (ItemDetailAdmin, ItemCategoryAdmin, ItemParentCategoryAdmin, ItemListAdmin, ItemListingPaginationAdmin)
 
 # class OrderAdmin(ModelAdmin):
 
