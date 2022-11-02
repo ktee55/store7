@@ -50,7 +50,7 @@ class MenuItem(Orderable):
     return 'Missing Title'
 
 
-@register_snippet
+# @register_snippet
 class Menu(ClusterableModel):
   """The main menu clusterable model."""
 

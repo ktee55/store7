@@ -44,8 +44,12 @@ header .button:hover {
   background-color: #fada1f;
 } */
 
-.nav-wrapper .inner {
+/* .nav-wrapper .inner {
 	padding-top: 3rem;
+} */
+
+.nav-search {
+  margin-top: 1rem;
 }
 
 .logo {

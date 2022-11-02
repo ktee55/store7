@@ -4,16 +4,16 @@ from wagtail.contrib.modeladmin.options import (
 )
 from .models import Menu
 
-# class MenuAdmin(ModelAdmin):
+class MenuAdmin(ModelAdmin):
 
-#   model = Menu
-#   menu_label = "Menu"
-#   menu_icon = "list-ul"
-#   menu_order = 500
-#   add_to_settings_menu = False
-#   exclude_from_explorer = False
-#   list_display = ("title", "slug")
-#   search_fields = ("title", "slug")
+  model = Menu
+  menu_label = "Menus"
+  menu_icon = "list-ul"
+  menu_order = 400
+  add_to_settings_menu = False
+  exclude_from_explorer = False
+  list_display = ("title", "slug")
+  search_fields = ("title", "slug")
 
-# modeladmin_register(MenuAdmin)
+modeladmin_register(MenuAdmin)
 

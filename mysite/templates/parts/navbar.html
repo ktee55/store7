@@ -1,4 +1,4 @@
-{% load cart_template_tags menus_tags menu_tags %}
+{% load cart_template_tags menus_tags menu_tags wagtailimages_tags %}
 {% get_menu "main" as main_menu %}
 
 <nav id="main-menu" class="navbar navbar-expand-lg navbar-light scrolling-navbar">
@@ -6,11 +6,16 @@
 
     <!-- Brand -->
     <a class="navbar-brand waves-effect" href="/">
-      <h1>
+      {% with settings.site_settings.SiteInfo.logo_image as logo_image %}
+      {% if logo_image %}
+        {% image logo_image max-200x290 as img %}
+        <h1 style="background-image: url('{{ img.url }}')">
         {% with settings.site_settings.SiteInfo.site_name as site_name %}
         {% if site_name %}{{ site_name }}{% endif %}
         {% endwith %}
-      </h1>
+        </h1>
+      {% endif %}
+      {% endwith %}
     </a>
 
     <!-- Collapse -->
