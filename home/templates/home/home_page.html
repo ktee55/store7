@@ -14,7 +14,7 @@
   {% include "parts/category-menu.html" %}
 
   {% if pickup_item %}
-  <div class="feature">
+  <div id="pickup-item">
     <div class="item-slide">
       {% if pickup_item.slide_images.count %}
       {% image pickup_item.slide_images.first.slide_image max-600x600 as img %}
@@ -22,6 +22,15 @@
         <img src="{{ img.url }}" alt="{% if item.list_img_alt %}{{ item.list_img_alt }}{% else %}{{ img.alt }}{% endif %}">
       </a>
       {% endif %}
+
+      {% if pickup_item.stock == 0 %}
+      <div class="sold">
+        <a href="{{ pickup_item.url }}">
+          <p>Sold</p>
+        </a>
+      </div>
+      {% endif %}
+
     </div>
 
     <!-- <div>
@@ -72,7 +81,7 @@
   {% endif %}
 
 
-  <div class="items">
+  <div class="featured-items">
 
     <section>
 

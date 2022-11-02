@@ -18,8 +18,8 @@ class HomePage(Page):
       pagination = 3
     context = super().get_context(request, *args, **kwargs)
     context["items"] = ItemDetailPage.objects.live().public().filter(featured=True).order_by('?')[:12]
-    context["pickup_item"] = ItemDetailPage.objects.live().public().filter(
-        pickup=True).order_by('-id').first()
+    context["pickup_item"] = ItemDetailPage.objects.live().public().filter(pickup=True).order_by('-id').last()
+    # context["pickup_item"] = ItemDetailPage.objects.live().public().filter(pickup=True).exclude(stock=0).order_by('-id').last()
     context["posts"] = BlogDetailPage.objects.filter(draft=False, whatsnew=True).order_by('-first_published_at')[:pagination]
 
     return context

@@ -10,7 +10,7 @@
 
 {% block content %}
 
-<div id="{{ self.id }}" class="container dark-grey-text">
+<div id="{{ self.id }}" class="item-detail-page container dark-grey-text">
 
   {% include "parts/category-menu.html" %}
 
@@ -33,10 +33,16 @@
         <!-- Add Arrows -->
         <div class="swiper-button-next swiper-button-white"></div>
         <div class="swiper-button-prev swiper-button-white"></div>
+
+        {% if self.stock == 0 %}
+        <div class="sold">
+          <p>Sold</p>
+        </div>
+        {% endif %}
+
       </div>
+
       <!-- swiper-container -->
-
-
       <div class="swiper-container gallery-thumbs">
         <ul class="swiper-wrapper">
           {% if self.slide_images.count %}

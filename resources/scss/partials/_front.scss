@@ -1,4 +1,7 @@
 // Home
+* {
+  position: relative;
+}
 
 #category-menu {
   // margin-top: 1rem;
@@ -19,7 +22,7 @@
   width: 250px;
 }
 
-.feature {
+.feature, #pickup-item {
   background: rgba(255, 255, 255, 0.5);
   -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
@@ -103,7 +106,7 @@
   }
 }
 
-.items > section > ul {
+.featured-items > section > ul {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -147,7 +150,7 @@
 // Square Technique
 // @media screen and (min-width: 484px) {
 // @media (min-width: 768px) {
-.items > section > ul > li {
+.featured-items > section > ul > li {
   &:before {
     content: "";
     display: block;
@@ -185,7 +188,7 @@
       }
     }
   }
-} // .items > div> ul > li
+} // .featured_items > div> ul > li
 // } // @media
 
 .other-items {
@@ -485,5 +488,18 @@
     color: red;
     font-weight: 600;
     font-size: 2rem;
+  }
+}
+
+.item-detail-page,
+#home {
+  .sold {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    overflow: hidden;
+    z-index: 100;
   }
 }
