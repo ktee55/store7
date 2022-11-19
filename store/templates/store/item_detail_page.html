@@ -188,12 +188,21 @@
       <div class=" item {% if item.featured %}featured-item{% endif %}">
         {% if item.list_image %}
         <div class="square">
-          {% image item.list_image max-150x150 as img %}
+          {% image item.list_image max-300x300 as img %}
           <a href="{{ item.url }}">
           <!-- <a href="{% pageurl item %}"> -->
             <img src="{{ img.url }}" alt="{% if item.list_img_alt %}{{ item.list_img_alt }}{% else %}{{ img.alt }}{% endif %}">
           </a>
         </div>
+
+        {% if item.stock == 0 %}
+        <div class="sold">
+          <a href="{{ item.url }}">
+            <p>Sold</p>
+          </a>
+        </div>
+        {% endif %}
+
         {% endif %}
         <div class="item-title">
           {% for category in item.categories.all %}
