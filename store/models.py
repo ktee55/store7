@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.shortcuts import reverse, render
 from django.template.defaultfilters import slugify
+from django import forms
 
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from modelcluster.models import ClusterableModel
@@ -148,7 +149,8 @@ class ItemDetailPage(Page):
       FieldPanel("price"),
       FieldPanel("discount_price"),
       FieldPanel("description"),
-      FieldPanel("categories"),
+      # FieldPanel("categories"),
+      FieldPanel('categories', widget=forms.CheckboxSelectMultiple),
       FieldPanel("tags"),
       FieldPanel("stock"),
       MultiFieldPanel([
