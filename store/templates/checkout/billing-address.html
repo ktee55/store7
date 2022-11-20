@@ -40,37 +40,39 @@
 
           <div id="div_id_billing_address_option" class="form-group">
             <div id="id_billing_address_option" class="d-block">
+
               {% for value, name in form.fields.billing_address_option.choices %}
+
               <div class="custom-control custom-radio {% if not forloop.counter == 1 %}mt-4{% endif %}">
                 <input id="billing_address_option_{{ forloop.counter }}" name="billing_address_option"
                   value="{{ value }}" type="radio" class="custom-control-input">
-                <label class="custom-control-label" for="billing_address_option_{{ forloop.counter }}">{{ name
-                  }}</label>
+                <label class="custom-control-label" for="billing_address_option_{{ forloop.counter }}">{{ name }}</label>
               </div>
+
               {% if forloop.counter == 1 %}
 
-              {% if user.billing_addresses.count %}
-              <div class="mb-4">
-                <div class="ml-3">
-                  <p class="address mb-0">〒{{ primary_billing_address.zip}}</p>
-                  <p class="address mb-0">{{ primary_billing_address}}</p>
-                  {% if user.billing_addresses.count > 1 %}
-                  <a href="{% url 'user:primary-billing-address' %}?next={{ request.path }}"
-                    class="btn btn-outline-second btn-sm">他の住所を選択する</a>
-                  {% endif %}
-                  <a href="{% url 'user:create-billing-address' %}?next={{ request.path }}"
-                    class="btn btn-second btn-sm">請求先住所を追加</a>
+                {% if user.billing_addresses.count %}
+                <div class="mb-4">
+                  <div class="ml-3">
+                    <p class="address mb-0">〒{{ primary_billing_address.zip}}</p>
+                    <p class="address mb-0">{{ primary_billing_address}}</p>
+                    {% if user.billing_addresses.count > 1 %}
+                    <a href="{% url 'user:primary-billing-address' %}?next={{ request.path }}"
+                      class="btn btn-outline-second btn-sm">他の住所を選択する</a>
+                    {% endif %}
+                    <a href="{% url 'user:create-billing-address' %}?next={{ request.path }}"
+                      class="btn btn-second btn-sm">請求先住所を追加</a>
+                  </div>
                 </div>
-              </div>
-              {% else %}
-              <div class="ml-3 mb-4">
-                <p class="mb-0">
-                  <small class="text-danger">請求先住所が登録されてません</small>
-                </p>
-                <a href="{% url 'user:create-billing-address' %}?next={{ request.path }}"
-                  class="btn btn-outline-main btn-sm">請求先住所を登録</a>
-              </div>
-              {% endif %}
+                {% else %}
+                <div class="ml-3 mb-4">
+                  <p class="mb-0">
+                    <small class="text-danger">請求先住所が登録されてません</small>
+                  </p>
+                  <a href="{% url 'user:create-billing-address' %}?next={{ request.path }}"
+                    class="btn btn-outline-main btn-sm">請求先住所を登録</a>
+                </div>
+                {% endif %}
 
               {% else %}
 

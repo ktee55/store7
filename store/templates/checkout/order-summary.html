@@ -23,7 +23,8 @@
     {% else %}
     <h5 class="mt-4 mb-5 text-danger">
       <i>ここでお名前をご登録ください
-        <a href="{% url 'user:edit-profile' %}?next={{ request.path }}">Click Here</a>
+        {% comment %} <a href="{% url 'user:edit-profile' %}?next={{ request.path }}">Click Here</a> {% endcomment %}
+        <a href="{% url 'user:add-name' %}">Click Here</a>
       </i>
     </h5>
     {% endif %}

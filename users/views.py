@@ -38,7 +38,7 @@ def edit_profile(request):
             u_form.save()
             p_form.save()
             messages.success(request, 'Your account has been updated!')
-            # to avoid re-post request to the page( if reached to reander it will re-post)
+            # to avoid re-post request to the page( if reached to render it will re-post)
             return redirect('user:profile')
     else:
         u_form = UserUpdateForm(instance=request.user)
@@ -50,6 +50,28 @@ def edit_profile(request):
     }
     return render(request, 'users/profile-edit.html', context)
 
+@login_required
+def add_name(request):
+# edit_profileと基本同じものだけど、注文途中で名前を入れた後、注文確認画面に戻す。
+    if request.method == 'POST':
+        u_form = UserUpdateForm(request.POST, instance=request.user)
+        p_form = ProfileUpdateForm(request.POST,
+                                   request.FILES,
+                                   instance=request.user.profile)
+        if u_form.is_valid() and p_form.is_valid():
+            u_form.save()
+            p_form.save()
+            messages.success(request, 'お名前が登録されました')
+            return redirect('store:order-summary')
+    else:
+        u_form = UserUpdateForm(instance=request.user)
+        p_form = ProfileUpdateForm(instance=request.user.profile)
+
+    context = {
+        'u_form': u_form,
+        'p_form': p_form
+    }
+    return render(request, 'users/profile-edit.html', context)
 
 class FavItemsListView(LoginRequiredMixin, ListView):
     model = ItemDetailPage

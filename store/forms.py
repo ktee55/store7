@@ -90,7 +90,7 @@ class CheckoutForm(forms.Form):
 
 BILLING_ADDRESS_OPTION = (
     ('A', 'この住所を使う'),
-    ('B', '請求先住所を配送先住所と同じにする')
+    ('B', '配送先住所と同じ住所を請求先住所に指定する')
 )
 
 class BillingAddressForm(forms.Form):

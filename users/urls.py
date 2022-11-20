@@ -7,6 +7,7 @@ urlpatterns = [
 
     path('profile/', ProfileView.as_view(), name='profile'),
     path('edit-profile/', edit_profile, name='edit-profile'),
+    path('add-name/', add_name, name='add-name'),
 
     path('fav-items/', FavItemsListView.as_view(), name='fav-items'),
     path('order-history', order_history,
