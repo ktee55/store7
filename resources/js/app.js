@@ -2,6 +2,16 @@ import { $, $$ } from './components/bling.js';
 
 (function ($, $$) {
 
+  const listLandscape = () => {
+    let listimgs = $$('.item-list .square img');
+    listimgs.forEach((listimg) => {
+      if (listimg.width > listimg.height) {
+        listimg.parentNode.parentNode.classList.add('landscape')
+      }
+    })
+  }
+  listLandscape();
+
   const makeSquare = () => {
 
     let squares = $$('.square');

@@ -150,10 +150,6 @@ div.item-list {
       // align-items: flex-start;
     }
   }
-  // .square {
-  //   display: flex;
-  //   align-items: center;
-  // }
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
     box-shadow: none;
@@ -244,3 +240,13 @@ table.table {
     /* IE Edge 12+ CSS styles go here */
   }
 }
+
+
+.landscape {
+  display: flex;
+  align-items: center;
+}
+  // .square {
+  //   display: flex;
+  //   align-items: center;
+  // }
