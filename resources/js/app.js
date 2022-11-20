@@ -2,6 +2,7 @@ import { $, $$ } from './components/bling.js';
 
 (function ($, $$) {
 
+  // リストページ横長の画像のみ縦方向真ん中寄せ（盾長のに入れるとなぜかmax-heightが効かなくなるため）
   const listLandscape = () => {
     let listimgs = $$('.item-list .square img');
     listimgs.forEach((listimg) => {
