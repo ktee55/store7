@@ -13,3 +13,6 @@ media
 /.vscode
 
 node_modules
+
+static
+stderr.log

@@ -12,16 +12,21 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
-import django_heroku
 
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 
-# DEBUG = True
-DEBUG = (os.getenv('DEGUG_VALLUE') == 'True')
+DEBUG = True
+# DEBUG = (os.getenv('DEGUG_VALLUE') == 'False')
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+# SECURITY WARNING: define the correct hosts in production!
+# ALLOWED_HOSTS = ['store7.pro', 'www.store7.pro', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = ['*']
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -79,7 +84,8 @@ INSTALLED_APPS = [
     # 'django_extensions',
     'captcha',
     'wagtailcaptcha',
-    'storages'
+    # 'storages'
+    'wagtail.contrib.styleguide',
 ]
 
 SITE_ID = 1
@@ -133,12 +139,13 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
+if ENVIRONMENT == 'production':
+  DATABASES = {
+      'default': {
+          'ENGINE': 'django.db.backends.sqlite3',
+          'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+      }
+  }
 
 
 # Password validation
@@ -205,7 +212,7 @@ WAGTAIL_SITE_NAME = "mysite"
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
-BASE_URL = 'http://store7.club'
+BASE_URL = 'http://store7.pro'
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -237,19 +244,16 @@ ACCOUNT_USERNAME_BLACKLIST = ["ko", "admin", "god"]
 ACCOUNT_USERNAME_MIN_LENGTH = 2
 
 
-if ENVIRONMENT == 'production':
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS')
 
-    django_heroku.settings(locals())
-
-    DEFAULT_FILE_STORAGE = 'core.storages.CustomS3Boto3Storage'
-
-    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
-
-    AWS_S3_FILE_OVERWRITE = False
-    AWS_DEFAULT_ACL = None
-    # https を有効にします
-    AWS_S3_SECURE_URLS = True
-    # 認証クエリーを無効にします
-    AWS_QUERYSTRING_AUTH = False
+RECAPTCHA_PUBLIC_KEY="6LedAKQiAAAAAGD5gmNhe8wGzmQpP65LzKSBPeNm"
+RECAPTCHA_PRIVATE_KEY="6LedAKQiAAAAAPt64Z_jTn6QByKVk7u0caP-SpY0"
+# Recaptcha settings
+# RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY')
+# RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY')
