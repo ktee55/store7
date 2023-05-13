@@ -5,7 +5,7 @@ from django.utils.html import format_html
 # from django.urls import reverse
 # from django.utils.translation import gettext_lazy as _
 
-from wagtail.core import hooks
+from wagtail import hooks
 # from wagtail.admin.wagtail_hooks import ExplorerMenuItem
 
 @hooks.register("insert_global_admin_css", order=100)

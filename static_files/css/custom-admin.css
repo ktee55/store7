@@ -13,46 +13,71 @@
   color: #008cba;
 } */
 
-.nav-wrapper .inner {
-  background-color: #575757;
+.sidebar-loading__inner, .sidebar__inner {
+  background-color: var(--color-primary);
 }
 
-.nav-search input {
+.sidebar-menu-item:hover,
+.sidebar-menu-item--active {
+  background-color: var(--color-primary-darker);
+}
+
+.w-bg-primary, .hover\:w-bg-primary-200:hover, .focus\:w-bg-primary-200:focus {
+  background-color: var(--color-primary-dark);
+}
+
+.sidebar-footer {
+  background-color: var(--color-primary-darker);
+}
+
+.button {
+  background-color: var(--color-primary);
+}
+
+.button:hover {
+  background-color: var(--color-primary-darker);
+}
+
+.c-page-explorer {
+  background-color: var(--color-primary-darker);
+}
+
+.c-page-explorer__header, 
+.sidebar-sub-menu-panel {
+  background-color: var(--color-primary-darker);
+}
+
+.c-page-explorer__header__title:focus, .c-page-explorer__header__title:hover, 
+.c-page-explorer__item__link:focus, .c-page-explorer__item__link:hover,
+.c-page-explorer__item__action:focus, .c-page-explorer__item__action:hover {
+  background-color: var(--color-primary-dark);
+}
+
+.c-page-explorer__header,
+.c-page-explorer__item {
+  border-color: var(--color-primary-dark);
+}
+
+input#menu-search-q {
   background-color: #737373;
 }
 
-.nav-main .menu-active {
-  background: #444;
+.w-header h1 {
+  color: var(--color-primary);
 }
 
-.nav-main .account {
-  background: #333;
+.listing .title .title-wrapper a, .listing .title h2 a,
+.modeladmin .listing thead th.sorted a {
+  color: var(--color-primary);
 }
+
 
 .messages .success {
   background-color: #008cba;
 }
 
-/* .button {
-  background-color: #008cba;
-}   */
 
-/* header .button {
-  background-color: #e1c105;
-}
-header .button:hover {
-  background-color: #fada1f;
-} */
-
-/* .nav-wrapper .inner {
-	padding-top: 3rem;
-} */
-
-.nav-search {
-  margin-top: 1rem;
-}
-
-.logo {
+.sidebar-wagtail-branding {
   display: none;
 }
 
