@@ -2,7 +2,7 @@
 from django.db import models
 
 from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel
-from wagtail.images.edit_handlers import ImageChooserPanel
+# from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.contrib.settings.models import BaseSetting, register_setting
 
 from subscribers.forms import SubscriberCreateForm
@@ -35,7 +35,7 @@ class SiteInfo(BaseSetting):
   panels = [
     FieldPanel("site_name"),
     MultiFieldPanel([
-        ImageChooserPanel("logo_image"),
+        FieldPanel("logo_image"),
     ], heading="ロゴ画像"),
     # MultiFieldPanel([
     #     ImageChooserPanel("blog_logo_image"),

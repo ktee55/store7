@@ -15,7 +15,7 @@ import os
 
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 
-DEBUG = True
+# DEBUG = True
 # DEBUG = (os.getenv('DEGUG_VALLUE') == 'False')
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'modelcluster',
     'taggit',
     'crispy_forms',
+    'crispy_bootstrap4',
     'wagtailmenus',
 
     'django.contrib.admin',
@@ -84,11 +85,13 @@ INSTALLED_APPS = [
     # 'django_extensions',
     'captcha',
     'wagtailcaptcha',
-    # 'storages'
+    'storages',
     'wagtail.contrib.styleguide',
 ]
 
 SITE_ID = 1
+
+DEFAULT_AUTO_FIELD='django.db.models.AutoField' 
 
 MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -139,13 +142,6 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-if ENVIRONMENT == 'production':
-  DATABASES = {
-      'default': {
-          'ENGINE': 'django.db.backends.sqlite3',
-          'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-      }
-  }
 
 
 # Password validation

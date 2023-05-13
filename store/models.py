@@ -159,7 +159,7 @@ class ItemDetailPage(Page):
       ], heading="Other Options"),
       InlinePanel("slide_images", max_num=10, min_num=1, label="スライド画像"),
       MultiFieldPanel([
-          ImageChooserPanel("list_image"),
+          FieldPanel("list_image"),
           FieldPanel("list_img_alt"),
       ], heading="リスト画像"),
       InlinePanel("size_option", max_num=10, min_num=0, label="サイズオプション"),
@@ -231,7 +231,7 @@ class ItemSlideImages(Orderable):
   )
 
   panels = [
-      ImageChooserPanel("slide_image"),
+      FieldPanel("slide_image"),
       FieldPanel("slide_img_alt"),
   ]
 

@@ -14,8 +14,8 @@ from taggit.models import TaggedItemBase, Tag
 
 from wagtail.core.models import Page, Orderable
 from wagtail.core.fields import StreamField, RichTextField
-from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel, MultiFieldPanel, InlinePanel
-from wagtail.images.edit_handlers import ImageChooserPanel
+from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, InlinePanel
+# from wagtail.images.edit_handlers import ImageChooserPanel
 from wagtail.snippets.edit_handlers import SnippetChooserPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.snippets.models import register_snippet
@@ -61,7 +61,7 @@ class BlogAuthor(models.Model):
         MultiFieldPanel(
             [
                 FieldPanel("name"),
-                ImageChooserPanel("image"),
+                FieldPanel("image"),
             ],
             heading="Name and Image",
         ),
@@ -235,7 +235,7 @@ class BlogDetailPage(Page):
         MultiFieldPanel([
           InlinePanel("main_contents", min_num=1, label="ブロック"),
         ], heading="本文"),
-        StreamFieldPanel("other_contents"),
+        FieldPanel("other_contents"),
         InlinePanel("links", label="参照URL"),
         FieldPanel("categories", widget=forms.CheckboxSelectMultiple),
         FieldPanel("tags"),
@@ -287,7 +287,7 @@ class BlogContent(Orderable):
   text = RichTextField(blank=True, null=True, verbose_name="テキスト")
 
   panels = [
-      ImageChooserPanel("image"),
+      FieldPanel("image"),
       FieldPanel("img_alt"),
       FieldPanel("text"),
   ]

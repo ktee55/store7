@@ -5,7 +5,7 @@ from django.template.defaultfilters import slugify
 from modelcluster.fields import ParentalKey
 from modelcluster.models import ClusterableModel
 
-from wagtail.admin.edit_handlers import FieldPanel, StreamFieldPanel, MultiFieldPanel, InlinePanel, PageChooserPanel
+from wagtail.admin.edit_handlers import FieldPanel, MultiFieldPanel, InlinePanel, PageChooserPanel #StreamFieldPanel
 from wagtail.snippets.models import register_snippet
 from wagtail.core.models import Orderable
 
