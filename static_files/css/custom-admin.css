@@ -86,3 +86,8 @@ input#menu-search-q {
   /* font-family: Open Sans,Arial,sans-serif; */
   font-family: inherit;
 }
+
+
+.Draftail-Editor {
+  min-height: 186px;
+}

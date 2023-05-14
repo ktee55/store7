@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+# import django_heroku
+# import environ
+# from dotenv import load_dotenv
 
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 
@@ -20,6 +23,10 @@ ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
+
+# env = environ.Env()
+# env.read_env(os.path.join(BASE_DIR, ".env"))
+# load_dotenv(BASE_DIR / '.env')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
@@ -101,6 +108,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 
     'wagtail.contrib.redirects.middleware.RedirectMiddleware',
 ]
@@ -193,7 +201,11 @@ STATICFILES_DIRS = [
 # ManifestStaticFilesStorage is recommended in production, to prevent outdated
 # JavaScript / CSS assets being served from cache (e.g. after a Wagtail upgrade).
 # See https://docs.djangoproject.com/en/3.1/ref/contrib/staticfiles/#manifeststaticfilesstorage
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+
+# Heroku
+# STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+# Render
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
@@ -212,10 +224,6 @@ BASE_URL = 'http://store7.pro'
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
-# Recaptcha settings
-# RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY')
-# RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY')
 
 NOCAPTCHA = True
 
@@ -240,16 +248,34 @@ ACCOUNT_USERNAME_BLACKLIST = ["ko", "admin", "god"]
 ACCOUNT_USERNAME_MIN_LENGTH = 2
 
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = os.getenv('EMAIL_USER')
-EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASS')
 
-RECAPTCHA_PUBLIC_KEY="6LedAKQiAAAAAGD5gmNhe8wGzmQpP65LzKSBPeNm"
-RECAPTCHA_PRIVATE_KEY="6LedAKQiAAAAAPt64Z_jTn6QByKVk7u0caP-SpY0"
+# django_heroku.settings(locals())
+
+DEFAULT_FILE_STORAGE = 'core.storages.CustomS3Boto3Storage'
+
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
+# AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+# AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+# AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+
+AWS_S3_FILE_OVERWRITE = False
+AWS_DEFAULT_ACL = None
+# https を有効にします
+AWS_S3_SECURE_URLS = True
+# 認証クエリーを無効にします
+AWS_QUERYSTRING_AUTH = False
+
+
 # Recaptcha settings
-# RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY')
-# RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY')
+RECAPTCHA_PUBLIC_KEY = os.getenv('RECAPTCHA_PUBLIC_KEY')
+RECAPTCHA_PRIVATE_KEY = os.getenv('RECAPTCHA_PRIVATE_KEY')
+# RECAPTCHA_PUBLIC_KEY = env('RECAPTCHA_PUBLIC_KEY')
+# RECAPTCHA_PRIVATE_KEY = env('RECAPTCHA_PRIVATE_KEY')
+
+
+SECRET_KEY = os.getenv('SECRET_KEY') 
+SUPERUSER_NAME = os.getenv('SUPERUSER_NAME')
+SUPERUSER_EMAIL = os.getenv('SUPERUSER_EMAIL')
+SUPERUSER_PASSWORD = os.getenv('SUPERUSER_PASSWORD')
