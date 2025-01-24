@@ -157,7 +157,7 @@ class ItemDetailPage(Page):
           FieldPanel("pickup"),
           FieldPanel("featured"),
       ], heading="Other Options"),
-      InlinePanel("slide_images", max_num=10, min_num=1, label="スライド画像"),
+      InlinePanel("slide_images", max_num=20, min_num=1, label="スライド画像"),
       MultiFieldPanel([
           FieldPanel("list_image"),
           FieldPanel("list_img_alt"),
