@@ -11,7 +11,8 @@ from taggit.models import Tag
 
 
 def global_val(request):
-    archives = BlogDetailPage.objects.filter(draft=False).values(
+    # archives = BlogDetailPage.objects.filter(draft=False).values(
+    archives = BlogDetailPage.objects.live().values(
         'first_published_at__year', 'first_published_at__month').annotate(Count('id')).order_by('-first_published_at__month')
 
     return {

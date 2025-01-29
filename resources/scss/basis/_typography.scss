@@ -1,3 +1,4 @@
+@use "variables" as var;
 // $main-font: "lato", sans-serif;
 // $secondary-font: "roboto", sans-serif;
 $jp-font: "Noto Sans JP", sans-serif;
@@ -195,7 +196,7 @@ h3 {
 .featured-items > section > ul > li {
   & > div h3 {
     color: white;
-    background: $main;
+    background: var.$main;
     font-weight: 300;
     font-size: 1.1rem;
     margin: 0;
@@ -234,7 +235,7 @@ li.username {
 
 @media (max-width: 768px) {
   li.username {
-    background: $main;
+    background: var.$main;
     color: #fff;
     h5 {
       color: #fff;

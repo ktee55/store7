@@ -1,12 +1,12 @@
 // @import "basis/reset";
-@import "basis/variables";
-@import "basis/typography";
+@use "basis/variables" as var;
+@use "basis/typography";
 
-@import "partials/nav";
-@import "partials/front";
-@import "partials/backend";
-@import "partials/lists";
-@import "partials/blog";
+@use "partials/nav";
+@use "partials/front";
+@use "partials/backend";
+@use "partials/lists";
+@use "partials/blog";
 
 // :root {
 //   --font-main: 'Noto Sans JP', sans-serif;
@@ -34,13 +34,13 @@ ul {
 }
 
 a {
-  color: $asagi;
+  color: var.$asagi;
 }
 
 .custom-control-input:checked ~ .custom-control-label::before {
   color: #fff;
-  border-color: $asagi;
-  background-color: $asagi;
+  border-color: var.$asagi;
+  background-color: var.$asagi;
 }
 
 img {
@@ -114,20 +114,20 @@ img {
 // }
 
 .btn-main {
-  background-color: $asagi;
+  background-color: var.$asagi;
   color: white;
 }
 .btn-outline-main {
-  border: 2px solid $asagi !important;
-  color: $asagi !important;
+  border: 2px solid var.$asagi !important;
+  color: var.$asagi !important;
 }
 .btn-second {
-  background-color: $tamamorokoshi;
+  background-color: var.$tamamorokoshi;
   color: white;
 }
 .btn-outline-second {
-  border: 2px solid $tamamorokoshi !important;
-  color: $tamamorokoshi !important;
+  border: 2px solid var.$tamamorokoshi !important;
+  color: var.$tamamorokoshi !important;
 }
 .pagination .btn {
   padding: 5px 10px;
@@ -142,17 +142,17 @@ img {
 }
 
 .badge-dispatched {
-  background-color: $asagi;
+  background-color: var.$asagi;
 }
 
 .badge-momo {
-  background-color: $momo;
+  background-color: var.$momo;
   color: white;
   padding-bottom: 4px;
 }
 
 .promo-code {
-  color: $nakabeni;
+  color: var.$nakabeni;
   background-color: RGB(245, 150, 170, 0.3);
 }
 
@@ -199,7 +199,7 @@ section header {
 } //.flex-buttons
 
 .fa-heart {
-  color: $asagi;
+  color: var.$asagi;
   font-size: 1.6rem;
   margin-left: 0.3rem;
 }

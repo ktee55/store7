@@ -13,71 +13,62 @@
 
   {% include "parts/category-menu.html" %}
 
-  {% if pickup_item %}
-  <div id="pickup-item">
-    <div class="item-slide">
-      {% if pickup_item.slide_images.count %}
-      {% image pickup_item.slide_images.first.slide_image max-600x600 as img %}
-      <a href="{{ pickup_item.url }}">
-        <img src="{{ img.url }}" alt="{% if item.list_img_alt %}{{ item.list_img_alt }}{% else %}{{ img.alt }}{% endif %}">
-      </a>
-      {% endif %}
+  {% if pickup_items.count %}
 
-      {% if pickup_item.stock == 0 %}
-      <div class="sold">
-        <a href="{{ pickup_item.url }}">
-          <p>Sold</p>
+    {% for item in pickup_items %}
+
+    <div id="pickup-item">
+      <div class="item-slide">
+        {% if item.slide_images.count %}
+        {% image item.slide_images.first.slide_image max-1200x1200 as img %}
+        <a href="{{ item.url }}">
+          <img src="{{ img.url }}" alt="{% if item.list_img_alt %}{{ item.list_img_alt }}{% else %}{{ img.alt }}{% endif %}">
         </a>
-      </div>
-      {% endif %}
+        {% endif %}
 
-    </div>
-
-    <!-- <div>
-          <small>{{ pickup_item.get_category_display }}</small>
-          <a href="{{ pickup_item.get_absolute_url }}">
-            <h3 class="mt-3 mb-3">{{ pickup_item.title }}</h3>
+        {% if item.stock == 0 %}
+        <div class="sold">
+          <a href="{{ item.url }}">
+            <p>Sold</p>
           </a>
-          <p>¥
+        </div>
+        {% endif %}
+
+      </div>
+      <!-- item-slide -->
+
+      <div class="item-detail">
+
+        <div>
+          <a href="">
+            <!-- <span
+                  class="badge {{ pickup_item.get_category_display }}-color mr-1">{{ pickup_item.get_category_display }}</span> -->
+            <!-- <span class="badge {{ pickup_item.category }}-color mr-1">{{ pickup_item.category }}</span> -->
+            <span class="badge category-color mr-1">{{ item.category }}</span>
+          </a>
+
+          <a href="{{ item.url }}">
+            <h2>{{ item.title }}</h2>
+          </a>
+          <p class="price">
             {% if item.discount_price %}
-            {{ pickup_item.discount_price }}
+            <span class="mr-1">
+              <small><del>¥{{ item.price | intcomma }}</del></small>
+            </span>
+            <span>¥{{ item.discount_price | intcomma }}</span>
             {% else %}
-            {{ pickup_item.price }}
+            <span>¥{{ item.price | intcomma }}</span>
             {% endif %}
           </p>
-        </div> -->
+          <p class="mt-3 mb-3">{{ item.description | safe | linebreaks | slice:":100" }} </p>
+        </div>
 
-    <div class="item-detail">
-
-      <div>
-
-        <a href="">
-          <!-- <span
-                class="badge {{ pickup_item.get_category_display }}-color mr-1">{{ pickup_item.get_category_display }}</span> -->
-          <!-- <span class="badge {{ pickup_item.category }}-color mr-1">{{ pickup_item.category }}</span> -->
-          <span class="badge category-color mr-1">{{ pickup_item.category }}</span>
-        </a>
-
-        <a href="{{ pickup_item.url }}">
-          <h2>{{ pickup_item.title }}</h2>
-        </a>
-        <p class="price">
-          {% if pickup_item.discount_price %}
-          <span class="mr-1">
-            <small><del>¥{{ pickup_item.price | intcomma }}</del></small>
-          </span>
-          <span>¥{{ pickup_item.discount_price | intcomma }}</span>
-          {% else %}
-          <span>¥{{ pickup_item.price | intcomma }}</span>
-          {% endif %}
-        </p>
-        <p class="mt-3 mb-3">{{ pickup_item.description | safe | linebreaks | slice:":100" }} </p>
-
-      </div>
-
+        </div>
+        <!-- item-detail -->
     </div>
-    <!-- item-detail -->
-  </div>
+    <!-- pickup-item -->
+
+    {% endfor %}
   {% endif %}
 
 
@@ -89,7 +80,7 @@
         <h1>Featured Items</h1>
       </header>
       <ul>
-        {% for item in items %}
+        {% for item in featured_items %}
         <li>
           <div>
             <a href="{{ item.url }}">

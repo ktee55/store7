@@ -3,7 +3,7 @@ from .base import *
 # from decouple import config
 # import dj_database_url
 
-DEBUG = True
+# DEBUG = True
 
 if ENVIRONMENT == 'production':
   DATABASES = {
@@ -30,22 +30,22 @@ if ENVIRONMENT == 'production':
 
 
 if ENVIRONMENT == 'development':
-  # DATABASES = {
-  #   'default': {
-  #       'ENGINE': 'django.db.backends.sqlite3',
-  #       'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-  #   }
-  # }
   DATABASES = {
-      'default': {
-          'ENGINE': 'django.db.backends.postgresql_psycopg2',
-          'NAME': 'store7',
-          'USER': 'postgres',
-          'PASSWORD': 'postgres',
-          'HOST': 'localhost',
-          'PORT': '',
-      }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
   }
+  # DATABASES = {
+  #     'default': {
+  #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+  #         'NAME': 'store7',
+  #         'USER': 'postgres',
+  #         'PASSWORD': 'postgres',
+  #         'HOST': 'localhost',
+  #         'PORT': '',
+  #     }
+  # }
 
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

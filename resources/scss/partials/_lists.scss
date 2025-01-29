@@ -1,3 +1,4 @@
+@use "../basis/variables" as var;
 img.thumb {
   width: auto;
 }
@@ -109,7 +110,7 @@ div.cart-total {
     }
   }
   .status {
-    color: $asagi;
+    color: var.$asagi;
   }
 } //.order-status
 

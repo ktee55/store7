@@ -17,9 +17,11 @@ class HomePage(Page):
     else:
       pagination = 3
     context = super().get_context(request, *args, **kwargs)
-    context["items"] = ItemDetailPage.objects.live().public().filter(featured=True).order_by('?')[:12]
-    context["pickup_item"] = ItemDetailPage.objects.live().public().filter(pickup=True).order_by('-id').last()
+    context["featured_items"] = ItemDetailPage.objects.live().public().filter(featured=True).order_by('?')[:12]
+    context["pickup_items"] = ItemDetailPage.objects.live().public().filter(pickup=True).order_by('-first_published_at')[:2]
+    # context["pickup_item"] = ItemDetailPage.objects.live().public().filter(pickup=True).order_by('-id').last()
     # context["pickup_item"] = ItemDetailPage.objects.live().public().filter(pickup=True).exclude(stock=0).order_by('-id').last()
-    context["posts"] = BlogDetailPage.objects.filter(draft=False, whatsnew=True).order_by('-first_published_at')[:pagination]
+    # context["posts"] = BlogDetailPage.objects.filter(draft=False, whatsnew=True).order_by('-first_published_at')[:pagination]
+    context["posts"] = BlogDetailPage.objects.live().public().filter(whatsnew=True).order_by('-first_published_at')[:pagination]
 
     return context

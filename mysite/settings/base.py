@@ -20,6 +20,7 @@ ENVIRONMENT = os.getenv('ENVIRONMENT', 'development')
 
 # DEBUG = True
 # DEBUG = (os.getenv('DEGUG_VALLUE') == 'False')
+DEBUG = os.getenv('DEGUG_VALLUE', 'True') 
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)

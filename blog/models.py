@@ -240,7 +240,7 @@ class BlogDetailPage(Page):
         FieldPanel("categories", widget=forms.CheckboxSelectMultiple),
         FieldPanel("tags"),
         MultiFieldPanel([
-            FieldPanel("draft"),
+            # FieldPanel("draft"),
             FieldPanel("whatsnew"),
         ], heading="Other Options"),
         MultiFieldPanel(

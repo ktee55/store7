@@ -210,7 +210,7 @@ class ItemDetailPage(Page):
 
 
 class ItemSlideImages(Orderable):
-  """Between 1 and 10 images for the item."""
+  """Between 1 and 20 images for the item."""
 
   page = ParentalKey(ItemDetailPage, on_delete=models.CASCADE,
                      related_name="slide_images")
